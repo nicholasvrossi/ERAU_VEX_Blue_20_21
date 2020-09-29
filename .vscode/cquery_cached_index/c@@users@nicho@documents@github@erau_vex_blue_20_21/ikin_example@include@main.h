@@ -4,7 +4,7 @@
  * Contains common definitions and header files used throughout your PROS
  * project.
  *
- * Copyright (c) 2017-2020, Purdue University ACM SIGBots.
+ * Copyright (c) 2017-2019, Purdue University ACM SIGBots.
  * All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -59,8 +59,6 @@
  * that they can be called from user code (i.e. calling autonomous from a
  * button press in opcontrol() for testing purposes).
  */
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -79,5 +77,5 @@ void opcontrol(void);
  */
 //#include <iostream>
 #endif
-#include "../src/OpControl.cpp"
+
 #endif  // _PROS_MAIN_H_
