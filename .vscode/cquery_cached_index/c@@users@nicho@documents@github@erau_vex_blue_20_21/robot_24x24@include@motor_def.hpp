@@ -1,7 +1,6 @@
 #ifndef _MOTOR_DEF_HPP_
 #define _MOTOR_DEF_HPP_
 #include "main.h"
-#include "../../G_inc/headers/InvKinematics.hpp"
 
 #define MOTOR_FRONT_LEFT_PORT (1)
 #define MOTOR_FRONT_RIGHT_PORT (2)

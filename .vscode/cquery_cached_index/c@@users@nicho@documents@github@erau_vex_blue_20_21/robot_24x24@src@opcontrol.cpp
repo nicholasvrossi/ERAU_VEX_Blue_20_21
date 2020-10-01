@@ -1,6 +1,6 @@
 #include "motor_def.hpp"
+#include "../../G_inc/source/InvKinematics.cpp"
 #include "main.h"
-#include "../../G_inc/headers/InvKinematics.hpp"
 
 
 void opcontrol() {

@@ -3,8 +3,8 @@
 #include <cmath>
 #include <cstdint>
 #include "main.h"
-#include "InvKinematics.hpp"
-#include "AbstractMovement.hpp"
+#include "../../G_inc/headers/InvKinematics.hpp"
+#include "../../G_inc/headers/AbstractMovement.hpp"
 
 
 void InvKinematics::addAndRunCommand(std::function<void()> funct) {
