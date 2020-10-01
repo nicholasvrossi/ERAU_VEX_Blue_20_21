@@ -79,5 +79,5 @@ void opcontrol(void);
  */
 //#include <iostream>
 #endif
-#include "../src/OpControl.cpp"
+//#include "motor_def.hpp"
 #endif  // _PROS_MAIN_H_

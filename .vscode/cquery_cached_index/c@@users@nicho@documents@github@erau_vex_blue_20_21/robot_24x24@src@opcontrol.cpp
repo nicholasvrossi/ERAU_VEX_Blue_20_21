@@ -1,8 +1,7 @@
-#ifndef _OPCONTROL_CPP_
-#define _OPCONTROL_CPP_
+#include "motor_def.hpp"
 #include "main.h"
 #include "../../G_inc/headers/InvKinematics.hpp"
-#include "motor_def.hpp"
+
 
 void opcontrol() {
   int XL = 0;
@@ -23,4 +22,3 @@ void opcontrol() {
     bazinga.hold(backRight, XL+YL-XR);
 	}
 }
-#endif //_OPCONTROL_CPP_
