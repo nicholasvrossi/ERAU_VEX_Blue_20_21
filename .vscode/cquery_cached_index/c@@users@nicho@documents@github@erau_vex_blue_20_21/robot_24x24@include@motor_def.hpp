@@ -7,27 +7,15 @@
 #define MOTOR_BACK_LEFT_PORT (3)
 #define MOTOR_BACK_RIGHT_PORT (4)
 
-pros::Controller master(pros::E_CONTROLLER_MASTER);
+extern pros::Controller master;
 
-pros::Motor frontLeft(MOTOR_FRONT_LEFT_PORT,
-                      pros::E_MOTOR_GEARSET_18,
-                      false,
-                      pros::E_MOTOR_ENCODER_COUNTS);
+extern pros::Motor frontLeft;
 
-pros::Motor frontRight(MOTOR_FRONT_RIGHT_PORT,
-                      pros::E_MOTOR_GEARSET_18,
-                      true,
-                      pros::E_MOTOR_ENCODER_COUNTS);
+extern pros::Motor frontRight;
 
-pros::Motor backLeft(MOTOR_BACK_LEFT_PORT,
-                      pros::E_MOTOR_GEARSET_18,
-                      false,
-                      pros::E_MOTOR_ENCODER_COUNTS);
+extern pros::Motor backLeft;
 
-pros::Motor backRight(MOTOR_BACK_RIGHT_PORT,
-                      pros::E_MOTOR_GEARSET_18,
-                      true,
-                      pros::E_MOTOR_ENCODER_COUNTS);
+extern pros::Motor backRight;
 
 //extern pros::MotorSet driveMotors;
 
