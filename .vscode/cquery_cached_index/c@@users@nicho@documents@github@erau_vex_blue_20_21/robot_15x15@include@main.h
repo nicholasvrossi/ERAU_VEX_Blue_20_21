@@ -59,6 +59,8 @@
  * that they can be called from user code (i.e. calling autonomous from a
  * button press in opcontrol() for testing purposes).
  */
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -77,5 +79,5 @@ void opcontrol(void);
  */
 //#include <iostream>
 #endif
-
+//#include "motor_def.hpp"
 #endif  // _PROS_MAIN_H_
