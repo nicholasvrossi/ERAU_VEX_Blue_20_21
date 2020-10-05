@@ -17,6 +17,6 @@ extern pros::Motor backLeft;
 
 extern pros::Motor backRight;
 
-//extern pros::MotorSet driveMotors;
+extern pros::MotorSet driveMotors;
 
 #endif //_MOTOR_DEF_HPP_
