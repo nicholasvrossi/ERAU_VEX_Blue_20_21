@@ -152,6 +152,11 @@
                 "version": "3.3.0"
             }
         },
-        "upload_options": {}
+        "upload_options": {
+            "compress_bin": true,
+            "description": "Created with PROS",
+            "remote_name": "Robot_15x15",
+            "slot": 1
+        }
     }
 }

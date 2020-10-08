@@ -1,7 +1,6 @@
 #include "main.h"
 #include "motor_def.hpp"
 
-
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 pros::Motor frontLeft(MOTOR_FRONT_LEFT_PORT,

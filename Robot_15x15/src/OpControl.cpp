@@ -8,7 +8,10 @@ void opcontrol() {
   int YL = 0;
   int XR = 0;
 
-
+  int FL_speed = 0;
+  int FR_speed = 0;
+  int BL_speed = 0;
+  int BR_speed = 0;
 
 	while (true) {
     InvKinematics bazinga;
@@ -16,9 +19,14 @@ void opcontrol() {
     YL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
     XR = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-    bazinga.hold(frontLeft, XL+YL+XR);
-    bazinga.hold(frontRight, (-1*XL)+YL-XR);
-    bazinga.hold(backLeft, (-1*XL)+YL+XR);
-    bazinga.hold(backRight, XL+YL-XR);
+    FL_speed = YL+XR;
+    FR_speed = YL-XR;
+    BL_speed = YL+XR;
+    BR_speed = YL-XR;
+
+    bazinga.hold(frontLeft, FL_speed);
+    bazinga.hold(frontRight, FR_speed);
+    bazinga.hold(backLeft, BL_speed);
+    bazinga.hold(backRight, BR_speed);
 	}
 }
