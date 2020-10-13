@@ -1,8 +1,12 @@
+// motor_def.cpp 24x24 robot
+
 #include "main.h"
 #include "motor_def.hpp"
 
+// Initialize controller
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
+// Define and initialize motors
 pros::Motor frontLeft(MOTOR_FRONT_LEFT_PORT,
                       pros::E_MOTOR_GEARSET_18,
                       false,
