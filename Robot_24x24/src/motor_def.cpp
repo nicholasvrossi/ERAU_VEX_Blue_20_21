@@ -39,4 +39,23 @@ pros::Motor inRight(MOTOR_INTAKE_RIGHT_PORT,
 
 pros::MotorSet Intake = {inLeft,inRight};
 
+pros::Motor liftLeft(MOTOR_LIFT_LEFT_PORT,
+                      pros::E_MOTOR_GEARSET_18,
+                      true,
+                      pros::E_MOTOR_ENCODER_COUNTS);
+
+pros::Motor liftRight(MOTOR_LIFT_RIGHT_PORT,
+                      pros::E_MOTOR_GEARSET_18,
+                      true,
+                      pros::E_MOTOR_ENCODER_COUNTS);
+
+pros::Motor ejector(MOTOR_EJECTOR_PORT,
+                      pros::E_MOTOR_GEARSET_18,
+                      true,
+                      pros::E_MOTOR_ENCODER_COUNTS);
+
+pros::MotorSet LiftSet = {liftLeft, liftRight, ejector};
+
+pros::ADIAnalogIn colorSensor('A');
+
 //extern pros::MotorSet driveMotors;
