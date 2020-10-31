@@ -37,9 +37,6 @@ void BasicMovement::run() {
     }
     vel /= motorTargets.size();
 
-    /*****************\
-    | stop all motors |
-    \*****************/
     pros::delay(consts.timeConst * vel);
 
     /*****************\
