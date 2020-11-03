@@ -3,8 +3,8 @@
 #include <cmath>
 #include <cstdint>
 #include "main.h"
-#include "../../G_inc/headers/InvKinematics.hpp"
-#include "../../G_inc/headers/AbstractMovement.hpp"
+#include "InvKinematics.hpp"
+#include "AbstractMovement.hpp"
 
 
 void InvKinematics::addAndRunCommand(std::function<void()> funct) {
@@ -44,7 +44,7 @@ InvKinematics* InvKinematics::delay(int64_t millis) {
 }
 
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //<<<                     >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //<<< InvKinematics::hold >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //<<<                     >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

@@ -22,8 +22,9 @@ void GaussianMovement::run() {
     /*******************\
     | start itterations |
     \*******************/
-    bool runIteration = true;
-    while (runIteration) {
+    const int Timout_Max = 25;
+    int timeout = Timout_Max;
+    while (timeout > 0) {
         for (auto motorTarget: motorTargets) {
             pros::Motor motor = motorTarget.first;
             int64_t target = motorTarget.second;
@@ -32,9 +33,10 @@ void GaussianMovement::run() {
             if (std::abs(error) > GAUSSIAN_MIN_ACCEPTABLE_ERROR) {
                 // ratio (error / target) of the range of the gaussian (2*shift)
                 motor.move_velocity((2*consts.shift) * (error / target));
+                timeout = Timout_Max;
             }
             else { // at target
-                runIteration = false;
+                timeout--;
                 motor.move_velocity(0);
             }
         }
