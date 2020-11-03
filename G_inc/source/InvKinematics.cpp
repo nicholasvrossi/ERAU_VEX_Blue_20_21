@@ -8,8 +8,9 @@
 
 
 void InvKinematics::addAndRunCommand(std::function<void()> funct) {
-    commands.push_back(funct);
-    commands.back()(); // this is not an error - don't mess with it
+    //commands.push_back(funct);
+    //commands.back()(); // this is not an error - don't mess with it
+    funct();
 }
 
 

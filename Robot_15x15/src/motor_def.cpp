@@ -26,3 +26,15 @@ pros::Motor backRight(MOTOR_BACK_RIGHT_PORT,
                       pros::E_MOTOR_GEARSET_18,
                       true,
                       pros::E_MOTOR_ENCODER_COUNTS);
+
+pros::Motor inLeft(MOTOR_INTAKE_LEFT_PORT,
+                      pros::E_MOTOR_GEARSET_18,
+                      true,
+                      pros::E_MOTOR_ENCODER_COUNTS);
+
+pros::Motor inRight(MOTOR_INTAKE_RIGHT_PORT,
+                      pros::E_MOTOR_GEARSET_18,
+                      false,
+                      pros::E_MOTOR_ENCODER_COUNTS);
+
+pros::MotorSet Intake = {inLeft,inRight};

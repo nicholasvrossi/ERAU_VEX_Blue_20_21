@@ -28,12 +28,14 @@ void opcontrol() {
   float BL_speed = 0; // BL denotes back left motor
   float BR_speed = 0; // BR denotes back right motor
 
+  InvKinematics Motor_Drive;
+
+  int ballColor = 0;
+
   // while loop used for maintaining opcontrol function
 	while (true) {
         // Construct instance of InvKinematics class to use motor driving functions
         // found in the InvKinematics class.
-        InvKinematics Motor_Drive;
-
 
         // Strafe Drive (Robot drive forward, backward, and strafes with left
         // joystick, and turns with right joystick x-values)
@@ -43,9 +45,9 @@ void opcontrol() {
 
         // Pass joystick values through a cubic function to provide smoother
         // driving operation
-        XL = pow((XL/127),3) * 127;
-        YL = pow((YL/127),3) * 127;
-        XR = pow((XR/127),3) * 127;
+        XL = std::pow((XL/127),3) * 127;
+        YL = std::pow((YL/127),3) * 127;
+        XR = std::pow((XR/127),3) * 127;
 
         // Compute speeds of each drive motor of the robot
         FL_speed = XL+YL+XR;
@@ -82,21 +84,30 @@ void opcontrol() {
         }
 
 
+        ballColor = colorSensor.get_value();
+
         if (master.get_digital(LIFT_UP_BTN)) {
             Motor_Drive.hold(LiftSet, LIFT_UP_SPEED);
 
             // reverse the ejector if color sensed is bad color
-            int ballColor = colorSensor.get_value();
             if ((IS_RED && (BLUE_COLOR_MIN <= ballColor && ballColor <= BLUE_COLOR_MAX))
                     || (!IS_RED && (RED_COLOR_MIN <= ballColor && ballColor <= RED_COLOR_MAX))) {
                 Motor_Drive.hold(ejector, EJECTOR_EJECT);
             }
+            else{
+                Motor_Drive.hold(ejector, LIFT_UP_SPEED);
+            }
+
         }
         else if (master.get_digital(LIFT_DN_BTN)) {
             Motor_Drive.hold(LiftSet, LIFT_DN_SPEED);
+            Motor_Drive.hold(ejector, LIFT_DN_SPEED);
         }
         else {
             Motor_Drive.hold(LiftSet, 0);
+            Motor_Drive.hold(ejector, 0);
         }
+
 	}
+
 }

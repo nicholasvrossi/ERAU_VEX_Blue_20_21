@@ -54,7 +54,7 @@ pros::Motor ejector(MOTOR_EJECTOR_PORT,
                       true,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
-pros::MotorSet LiftSet = {liftLeft, liftRight, ejector};
+pros::MotorSet LiftSet = {liftLeft, liftRight};
 
 pros::ADIAnalogIn colorSensor('A');
 

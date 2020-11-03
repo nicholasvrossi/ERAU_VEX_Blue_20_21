@@ -4,9 +4,15 @@
 #include "../../G_inc/source/InvKinematics.cpp"
 #include "main.h"
 #include "math.h"
+#include <iostream>
+using namespace std;
 
 // Define button to be pressed that slows robot's speed
 #define SLOW_BUTTON (pros::E_CONTROLLER_DIGITAL_L2)
+// Define button to be pressed that starts intake collection of balls
+#define INTAKE (pros::E_CONTROLLER_DIGITAL_R1)
+// Define button to be pressed that starts outtake dispose of balls
+#define OUTTAKE (pros::E_CONTROLLER_DIGITAL_R2)
 
 // Start op-control function
 void opcontrol() {
@@ -59,5 +65,16 @@ void opcontrol() {
     Motor_Drive.hold(frontRight, FR_speed);
     Motor_Drive.hold(backLeft, BL_speed);
     Motor_Drive.hold(backRight, BR_speed);
+
+    if(master.get_digital(INTAKE)){
+      Motor_Drive.hold(Intake,INTAKE_SPEED * 0.67);
+    }
+    else if(master.get_digital(OUTTAKE)){
+      Motor_Drive.hold(Intake,OUTTAKE_SPEED * 0.67);
+    }
+    else{
+      Motor_Drive.hold(inLeft,0);
+      Motor_Drive.hold(inRight,0);
+    }
 	}
 }
