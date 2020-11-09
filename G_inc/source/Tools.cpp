@@ -1,7 +1,7 @@
 #include <cstdint>
 #include <cmath>
 #include "main.h"
-#include "Tools.hpp"
+#include "../headers/Tools.hpp"
 
 
 template <typename T> int sign(T val) {

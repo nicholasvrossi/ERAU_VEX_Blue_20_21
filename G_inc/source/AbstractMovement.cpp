@@ -1,6 +1,6 @@
 #include <cstdint>
 #include "main.h"
-#include "AbstractMovement.hpp"
+#include "../headers/AbstractMovement.hpp"
 
 
 AbstractMovement* AbstractMovement::setReversedIf(bool reversed) {

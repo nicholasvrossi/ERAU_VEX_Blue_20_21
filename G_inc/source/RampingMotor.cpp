@@ -2,8 +2,8 @@
 #include <cstdint>
 #include <algorithm>
 #include "main.h"
-#include "RampingMotor.hpp"
-#include "Tools.hpp"
+#include "../headers/RampingMotor.hpp"
+#include "../headers/Tools.hpp"
 
 
 void pros::RampingMotor::setup(float rampStep) {

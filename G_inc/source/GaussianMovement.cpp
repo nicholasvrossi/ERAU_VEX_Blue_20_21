@@ -1,7 +1,7 @@
 #include <cstdint>
 #include "main.h"
-#include "GaussianMovement.hpp"
-#include "Tools.hpp"
+#include "../headers/GaussianMovement.hpp"
+#include "../headers/Tools.hpp"
 
 #define GAUSSIAN_MIN_ACCEPTABLE_ERROR (0)
 

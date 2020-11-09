@@ -12,8 +12,9 @@
 // Define button to be pressed that starts outtake dispose of balls
 #define OUTTAKE (pros::E_CONTROLLER_DIGITAL_R2)
 
-#define LIFT_UP_BTN (pros::E_CONTROLLER_DIGITAL_A)
-#define LIFT_DN_BTN (pros::E_CONTROLLER_DIGITAL_A)
+#define LIFT_UP_BTN (pros::E_CONTROLLER_DIGITAL_R1)
+#define LIFT_DN_BTN (pros::E_CONTROLLER_DIGITAL_L1)
+#define LIFT_AND_EJECT_BTN (pros::E_CONTROLLER_DIGITAL_A)
 
 // Start op-control function
 void opcontrol() {
@@ -73,9 +74,13 @@ void opcontrol() {
 
         // If buttons are pushed either collect or dispose of balls in the intake
         if(master.get_digital(INTAKE)){
+          // Motor_Drive.hold(inLeft,INTAKE_SPEED * 0.67);
+          // Motor_Drive.hold(inRight,INTAKE_SPEED * 0.67);
           Motor_Drive.hold(Intake,INTAKE_SPEED * 0.67);
         }
         else if(master.get_digital(OUTTAKE)){
+          // Motor_Drive.hold(inLeft,OUTTAKE_SPEED * 0.67);
+          // Motor_Drive.hold(inRight,OUTTAKE_SPEED * 0.67);
           Motor_Drive.hold(Intake,OUTTAKE_SPEED * 0.67);
         }
         else{
@@ -86,6 +91,10 @@ void opcontrol() {
 
         ballColor = colorSensor.get_value();
 
+        if (master.get_digital(LIFT_AND_EJECT_BTN)) {
+              Motor_Drive.hold(LiftSet, LIFT_UP_SPEED);
+              Motor_Drive.hold(ejector, EJECTOR_EJECT);
+        }
         if (master.get_digital(LIFT_UP_BTN)) {
             Motor_Drive.hold(LiftSet, LIFT_UP_SPEED);
 

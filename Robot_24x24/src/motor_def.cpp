@@ -41,7 +41,7 @@ pros::MotorSet Intake = {inLeft,inRight};
 
 pros::Motor liftLeft(MOTOR_LIFT_LEFT_PORT,
                       pros::E_MOTOR_GEARSET_18,
-                      true,
+                      false,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
 pros::Motor liftRight(MOTOR_LIFT_RIGHT_PORT,

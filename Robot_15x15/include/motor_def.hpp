@@ -10,7 +10,7 @@
 // Define the four drive motors
 #define MOTOR_FRONT_LEFT_PORT (1)
 #define MOTOR_FRONT_RIGHT_PORT (3)
-#define MOTOR_BACK_LEFT_PORT (2)
+#define MOTOR_BACK_LEFT_PORT (5)
 #define MOTOR_BACK_RIGHT_PORT (4)
 
 // intake motors
