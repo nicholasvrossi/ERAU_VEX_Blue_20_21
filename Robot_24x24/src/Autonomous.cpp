@@ -1,9 +1,11 @@
 #include "motor_def.hpp"
-#include "../../G_inc/source/InvKinematics.cpp"
 #include "main.h"
 #include "math.h"
 #include <iostream>
+#include <vector>
 using namespace std;
+
+void moveTo(int FR,int FL,int BR,int BL,int speed);
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -18,15 +20,18 @@ using namespace std;
  */
 void autonomous() {
 enum commands {intake, outtake, eject};
-int n = 2;
+const int n = 2;
 int speed = 110;
 int numCounts = 2000; // While Loop limit
-int arr[n][6] = {
-  // {, , , , ,},
-  // {, , , , ,}
+// int arr[n][6] = {
+//   // {, , , , ,},
+//   // {, , , , ,}
+// };
+vector<int*> arr = {
+
 };
 
-for(int[] row: arr){
+for(int* row: arr){
   if (row[5] == intake){
     inLeft.move(INTAKE_SPEED);
     inRight.move(INTAKE_SPEED);
@@ -64,17 +69,19 @@ for(int[] row: arr){
   int error3 = 0;
 
 
-
+  frontRight.tare_position();
+  frontLeft.tare_position();
+  backRight.tare_position();
+  backLeft.tare_position();
 
   while((ii <= numCounts) || (error0 < (error0 - 5) &  error1 < (error1 - 5) & error2 < (error2 - 5) & error3 < (error3 - 5))){
   moveTo(row[0],row[1],row[2],row[3],speed);
   ii++;
   }
-  inLeft.move(0);
-  inRight.move(0);
-  liftRight.move(0);
-  liftLeft.move(0);
-  ejector.move(0);
+  frontRight.move(0);
+  frontLeft.move(0);
+  backRight.move(0);
+  backLeft.move(0);
 }
 
 }
@@ -82,14 +89,14 @@ for(int[] row: arr){
 void moveTo(int FR,int FL,int BR,int BL,int speed){
 
   // FR
-  frontRight.move_absolute(FR,speed)
+  frontRight.move_absolute(FR,speed);
 
   // FL
-  frontRight.move_absolute(FL,speed)
+  frontLeft.move_absolute(FL,speed);
 
   // BR
-  backRight.move_absolute(BR,speed)
+  backRight.move_absolute(BR,speed);
 
   // BL
-  backLeft.move_absolute(BL,speed)
+  backLeft.move_absolute(BL,speed);
  }
