@@ -1,4 +1,9 @@
+#include "motor_def.hpp"
+#include "../../G_inc/source/InvKinematics.cpp"
 #include "main.h"
+#include "math.h"
+#include <iostream>
+using namespace std;
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -12,5 +17,38 @@
  * from where it left off.
  */
 void autonomous() {
-  
+enum commands {intake, outtake, eject};
+int n = 2;
+int speed = 127;
+int arr[n][5] = {
+  {, , , ,},
+  {, , , ,}
+};
+
+for(int[] row: arr){
+  if row[4] == intake{
+
+  }
+
+  elseif row[4] == outtake
+
+
+  moveTo(row[0],row[1],row[2],row[3],speed);
 }
+
+}
+
+void moveTo(int FR,int FL,int BR,int BL,int speed){
+
+  // FR
+  frontRight.move_absolute(FR,speed)
+
+  // FL
+  frontRight.move_absolute(FL,speed)
+
+  // BR
+  backRight.move_absolute(BR,speed)
+
+  // BL
+  backLeft.move_absolute(BL,speed)
+ }
