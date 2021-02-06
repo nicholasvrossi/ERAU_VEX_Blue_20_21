@@ -6,14 +6,27 @@
 #include <cmath>
 #include "../include/motor_def.hpp"
 
+
+// Define button to be pressed that slows robot's speed
+#define SLOW_BUTTON (pros::E_CONTROLLER_DIGITAL_L2)
+// Define button to be pressed that starts intake collection of balls
+#define INTAKE (pros::E_CONTROLLER_DIGITAL_R1)
+// Define button to be pressed that starts outtake dispose of balls
+#define OUTTAKE (pros::E_CONTROLLER_DIGITAL_R2)
+
+#define LIFT_UP_BTN (pros::E_CONTROLLER_DIGITAL_R1)
+#define LIFT_DN_BTN (pros::E_CONTROLLER_DIGITAL_L1)
+#define LIFT_AND_EJECT_BTN (pros::E_CONTROLLER_DIGITAL_A)
+
+
 // motors you want to track
 // NOTE: array is an array of pointers: must use 'new' keyword or dereferernce
 //  and existing non-pointer motor
-pros::Motor *motors[] = {
-    new pros::Motor(1), // front left
-    new pros::Motor(2), // front right
-    new pros::Motor(3), // back left
-    new pros::Motor(4)  // back right
+std::vector<pros::Motor> motors = {
+    pros::Motor(1), // front left
+    pros::Motor(2), // front right
+    pros::Motor(3), // back left
+    pros::Motor(4)  // back right
 };
 
 pros::Controller controllerMaster(pros::E_CONTROLLER_MASTER);
@@ -28,18 +41,6 @@ void disabled() {}
 void competition_initialize() {}
 
 void autonomous() {}
-
-
-// Define button to be pressed that slows robot's speed
-#define SLOW_BUTTON (pros::E_CONTROLLER_DIGITAL_L2)
-// Define button to be pressed that starts intake collection of balls
-#define INTAKE (pros::E_CONTROLLER_DIGITAL_R1)
-// Define button to be pressed that starts outtake dispose of balls
-#define OUTTAKE (pros::E_CONTROLLER_DIGITAL_R2)
-
-#define LIFT_UP_BTN (pros::E_CONTROLLER_DIGITAL_R1)
-#define LIFT_DN_BTN (pros::E_CONTROLLER_DIGITAL_L1)
-#define LIFT_AND_EJECT_BTN (pros::E_CONTROLLER_DIGITAL_A)
 
 void driveControl() {
   // Initialize variables for left joystick y/x-value and right joystick x-value
@@ -143,22 +144,45 @@ void driveControl() {
     }
 }
 void opcontrol() {
-    while (true) {
-        int i = 1;
-        for (pros::Motor *motorPtr: motors) {
-            pros::Motor motor = *motorPtr;
+    std::vector<int> storedVals;
 
-            double encoderVal = motor.get_position();
+    while (true) {
+        for (int i = 0; i < motors.size(); ++i) {
+            pros::Motor motor = motors[i];
+            int encoderVal = motor.get_position();
 
             char encoderValStr[32];
-            sprintf(encoderValStr, "%-2d: %.2lf", i, encoderVal);
+            sprintf(encoderValStr, "%-2d: %d", i, encoderVal);
 
             pros::lcd::set_text(i, encoderValStr);
 
-            if (controllerMaster.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+            while (controllerMaster.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+                storedVals.push_back(encoderVal);
                 motor.tare_position();
+
+                while (controllerMaster.get_digital(pros::E_CONTROLLER_DIGITAL_A))
+                    pros::delay(50);
             }
             ++i;
+        }
+
+        while (controllerMaster.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+            int index = 0;
+            while (index < storedVals.size()) {
+                std::cout << '{';
+
+                for (int i = 0; i < motors.size(); ++i) {
+                    if (i != 0)
+                        std::cout << ", ";
+
+                    std::cout << storedVals[index];
+                }
+
+                std::cout << "}," << std::endl;
+            }
+
+            while (controllerMaster.get_digital(pros::E_CONTROLLER_DIGITAL_B))
+                pros::delay(50);
         }
 
         driveControl();
