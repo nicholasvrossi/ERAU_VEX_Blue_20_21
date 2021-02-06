@@ -20,7 +20,7 @@ void autonomous() {
 enum commands {intake, outtake, eject};
 int n = 2;
 int speed = 110;
-int numCounts = 2000; // While Loop limit
+int numCounts = 10000; // While Loop limit
 int arr[n][6] = {
   // {, , , , ,},
   // {, , , , ,}
