@@ -37,4 +37,21 @@ pros::Motor inRight(MOTOR_INTAKE_RIGHT_PORT,
                       false,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
+
+
+pros::Motor launchAngle(MOTOR_LAUNCHER_ANGLE,
+                      pros::E_MOTOR_GEARSET_18,
+                      true,
+                      pros::E_MOTOR_ENCODER_COUNTS);
+
+pros::Motor shootLeft(MOTOR_LAUNCHER_LEFT_SHOOTER ,
+                      pros::E_MOTOR_GEARSET_18,
+                      true,
+                      pros::E_MOTOR_ENCODER_COUNTS);
+
+pros::Motor shoootRight(MOTOR_LAUNCHER_RIGHT_SHOOTER ,
+                      pros::E_MOTOR_GEARSET_18,
+                      false,
+                      pros::E_MOTOR_ENCODER_COUNTS);
+
 pros::MotorSet Intake = {inLeft,inRight};

@@ -298,6 +298,11 @@
                 "version": "4.2.0"
             }
         },
-        "upload_options": {}
+        "upload_options": {
+            "compress_bin": true,
+            "description": "Created with PROS",
+            "remote_name": "Tester 15",
+            "slot": 1
+        }
     }
 }

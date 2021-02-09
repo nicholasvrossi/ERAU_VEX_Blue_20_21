@@ -22,7 +22,11 @@ std::vector<pros::Motor> motors = {
     pros::Motor(1), // front left
     pros::Motor(2), // front right
     pros::Motor(3), // back left
-    pros::Motor(4)  // back right
+    pros::Motor(4),
+    pros::Motor(9),
+    pros::Motor(6),
+    pros::Motor(5)
+      // back right
 };
 
 pros::Controller controllerMaster(pros::E_CONTROLLER_MASTER);
@@ -103,7 +107,7 @@ void driveControl() {
 }
 void opcontrol() {
     std::vector<int> storedVals;
-
+    initialize();
     while (true) {
         for (int i = 0; i < motors.size(); ++i) {
             pros::Motor motor = motors[i];
