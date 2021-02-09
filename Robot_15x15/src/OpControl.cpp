@@ -14,6 +14,12 @@ using namespace std;
 // Define button to be pressed that starts outtake dispose of balls
 #define OUTTAKE (pros::E_CONTROLLER_DIGITAL_R2)
 
+#define AIM (pros::E_CONTROLLER_DIGITAL_UP)
+
+#define LOWER (pros::E_CONTROLLER_DIGITAL_DOWN)
+
+#define SHOOT (pros::E_CONTROLLER_DIGITAL_L1)
+
 // Start op-control function
 void opcontrol() {
 
@@ -76,5 +82,27 @@ void opcontrol() {
       Motor_Drive.hold(inLeft,0);
       Motor_Drive.hold(inRight,0);
     }
+
+
+    // Toggle launcher angle to upright position
+    if(master.get_degita(AIM)) //Need toggle for AIM
+      Motor_Drive.hold(launchAngle,AIM_SPEED);
+
+
+    // When held lower launcher angle
+    elseif(master.get_digital(LOWER)) //Need bottom constraint for LOwer
+      Motor_Drive.hold(launchAngle,50);
+
+    // When pushed cycle through one launch of shooter
+    elseif(master.get_digetal(SHOOT)) //Need Cycle for shoot
+      Motor_Drive.hold(shootLeft,LAUNCH_SPEED);
+      Motor_Drive.hold(shootRight,LAUNCH_SPEED);
+
+    // When no launcher movement is needed motors are off
+    else
+      Motor_Drive.hold(shootLeft,0);
+      Motor_Drive.hold(shootRight,0);
+      Motor_Drive.hold(launchAngle,0);
+
 	}
 }
