@@ -10,15 +10,19 @@ using namespace std;
 
 // Define button to be pressed that slows robot's speed
 #define SLOW_BUTTON (pros::E_CONTROLLER_DIGITAL_L2)
+#define SLOW_BUTTON (pros::E_CONTROLLER_DIGITAL_B)
 // Define button to be pressed that starts intake collection of balls
 #define INTAKE (pros::E_CONTROLLER_DIGITAL_R1)
 // Define button to be pressed that starts outtake dispose of balls
 #define OUTTAKE (pros::E_CONTROLLER_DIGITAL_R2)
 
 #define AIM (pros::E_CONTROLLER_DIGITAL_UP)
+#define AIM (pros::E_CONTROLLER_DIGITAL_L1)
 
 #define LOWER (pros::E_CONTROLLER_DIGITAL_DOWN)
+#define LOWER (pros::E_CONTROLLER_DIGITAL_L2)
 
+<<<<<<< Updated upstream
 #define SHOOT (pros::E_CONTROLLER_DIGITAL_L1)
 #define DISP_ENCODERS (pros::E_CONTROLLER_DIGITAL_Y)
 #define TARE_ENCODERS (pros::E_CONTROLLER_DIGITAL_X)
@@ -36,6 +40,9 @@ int encFL = 0;
 int encBR = 0;
 int encBL = 0;
 int encAIM = 0;
+=======
+#define SHOOT (pros::E_CONTROLLER_DIGITAL_A)
+>>>>>>> Stashed changes
 
 // Start op-control function
 void opcontrol() {
@@ -45,6 +52,9 @@ void opcontrol() {
   // Initialize variables for left joystick y-value and right joystick x-value
   float YL = 0;
   float XR = 0;
+
+  int Low = 0;
+  int cycle = 0;
 
   // Initialize variables for motor speeds
   int FL_speed = 0; // FL denotes front left motor
@@ -103,12 +113,28 @@ void opcontrol() {
     }
 
 
+    Low = launchAngle.get_position();
     // Toggle launcher angle to upright position
+<<<<<<< Updated upstream
     if(master.get_digital(AIM)){ //Need toggle for AIM
       Motor_Drive.hold(launchAngle,AIM_SPEED);
     }
+=======
+  if(master.get_digital(AIM) {
+    if (lastButtonState==1){
+        Motor_Drive.hold(launchAngle,AIM_UP);
+    }
+  }
 
+  if (master.get_digital(LOWER) {
+>>>>>>> Stashed changes
+
+    //Stops lowering the launcher at a certain point
+    if ((Low)<=(0)){
+        Motor_Drive.hold(launchAngle,0);
+      }
     // When held lower launcher angle
+<<<<<<< Updated upstream
     else if(master.get_digital(LOWER)){ //Need bottom constraint for LOwer
       Motor_Drive.hold(launchAngle,50);
     }
@@ -117,12 +143,34 @@ void opcontrol() {
       Motor_Drive.hold(shootLeft,LAUNCH_SPEED);
       Motor_Drive.hold(shootRight,LAUNCH_SPEED);
     }
+=======
+      else (master.get_digital(LOWER)){
+        Motor_Drive.hold(launchAngle,50);
+      }
+    }
+
+
+    // When pushed cycle through one launch of shooter
+    if (encoder==0)){
+      Motor_Drive.hold(shootLeft,0);
+      Motor_Drive.hold(shootRight,0);
+    }
+
+    if(master.get_digital(SHOOT)) {
+
+      Motor_Drive.hold(shootLeft,LAUNCH_SPEED);
+      Motor_Drive.hold(shootRight,LAUNCH_SPEED);
+      }
+
+
+>>>>>>> Stashed changes
     // When no launcher movement is needed motors are off
     else{
       Motor_Drive.hold(shootLeft,0);
       Motor_Drive.hold(shootRight,0);
       Motor_Drive.hold(launchAngle,0);
     }
+<<<<<<< Updated upstream
 
 
 
@@ -159,5 +207,7 @@ void opcontrol() {
         pros::delay(20);
       }
 
+=======
+>>>>>>> Stashed changes
 	}
 }
