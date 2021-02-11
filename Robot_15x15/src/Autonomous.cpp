@@ -19,52 +19,56 @@ void moveTo(int FR,int FL,int BR,int BL,int speed);
  * from where it left off.
  */
 void autonomous() {
-/*enum commands {intake, outtake, eject};
-int n = 2;
-int speed = 127;
-int arr[n][5] = {
+enum commands {intake, outtake, aim, lower, shoot};
+//int n = 2;
+//int speed = 127;
+/*int arr[n][5] = {
   {, , , ,},
   {, , , ,}
-};
+};*/
 //enum commands {intake, outtake, eject};
 //const int n = 2;
-//int speed = 110;
+int speed = 110;
+int encAIM = 0;
+int encAIM_goal = 0;
 
 int numCounts = 20000; // While Loop limit
 vector<vector<int> > arr = {
     {1000,1000 ,1000, 1000,1000 ,0},
-    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,0}
+    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,0},
+    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,1},
+    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,2},
+    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,3},
+    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,4},
+    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,5}
 };
 
 for(vector<int> row: arr){
-  /*if (row[5] == intake){
+  if (row[5] == intake){
     inLeft.move(INTAKE_SPEED);
     inRight.move(INTAKE_SPEED);
-    liftRight.move(LIFT_UP_SPEED);
-    liftLeft.move(LIFT_UP_SPEED);
-    ejector.move(EJECTOR_EJECT);
   }
   else if (row[5] == outtake){
     inLeft.move(OUTTAKE_SPEED);
     inRight.move(OUTTAKE_SPEED);
-    liftRight.move(LIFT_DN_SPEED);
-    liftLeft.move(LIFT_DN_SPEED);
-    ejector.move(-EJECTOR_EJECT);
   }
-  else if (row[5] == eject){
+  else if (row[5] == aim){
     inLeft.move(0);
     inRight.move(0);
-    liftRight.move(0);
-    liftLeft.move(0);
-    ejector.move(EJECTOR_EJECT);
+    encAIM_goal = 177;
+  }
+  else if(row[5] == lower){
+    inLeft.move(0);
+    inRight.move(0);
+  }
+  else if(row[5] == shoot){
+    inLeft.move(0);
+    inRight.move(0);
   }
   else{
     inLeft.move(0);
     inRight.move(0);
-    liftRight.move(0);
-    liftLeft.move(0);
-    ejector.move(0);
-}*/
+}
 
   int speed = row[4];
   int ii = 0;
@@ -90,7 +94,7 @@ for(vector<int> row: arr){
   pros::delay(500);
 }
 
-*/}
+}
 
 void moveTo(int FR,int FL,int BR,int BL,int speed){
 

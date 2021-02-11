@@ -15,15 +15,16 @@
 
 // intake motors
 #define MOTOR_INTAKE_LEFT_PORT  (4)
-#define MOTOR_INTAKE_RIGHT_PORT (3)
+#define MOTOR_INTAKE_RIGHT_PORT (9)
 #define INTAKE_SPEED  (127)
 #define OUTTAKE_SPEED (-INTAKE_SPEED)
 #define AIM_SPEED  (127)
 #define LAUNCH_SPEED  (127)
 
 // Launcher motors
+#define MOTOR_LAUNCHER_ANGLE_MAX (177)
 #define MOTOR_LAUNCHER_ANGLE (5)
-#define MOTOR_LAUNCHER_LEFT_SHOOTER (9)
+#define MOTOR_LAUNCHER_LEFT_SHOOTER (20)
 #define MOTOR_LAUNCHER_RIGHT_SHOOTER (6)
 
 // Prototype controller initialization function

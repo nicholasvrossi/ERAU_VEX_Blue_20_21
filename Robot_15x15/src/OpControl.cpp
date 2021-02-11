@@ -9,17 +9,17 @@
 using namespace std;
 
 // Define button to be pressed that slows robot's speed
-#define SLOW_BUTTON (pros::E_CONTROLLER_DIGITAL_L2)
+#define SLOW_BUTTON (pros::E_CONTROLLER_DIGITAL_B)
 // Define button to be pressed that starts intake collection of balls
 #define INTAKE (pros::E_CONTROLLER_DIGITAL_R1)
 // Define button to be pressed that starts outtake dispose of balls
 #define OUTTAKE (pros::E_CONTROLLER_DIGITAL_R2)
 
-#define AIM (pros::E_CONTROLLER_DIGITAL_UP)
+#define AIM (pros::E_CONTROLLER_DIGITAL_L1)
 
-#define LOWER (pros::E_CONTROLLER_DIGITAL_DOWN)
+#define LOWER (pros::E_CONTROLLER_DIGITAL_L2)
 
-#define SHOOT (pros::E_CONTROLLER_DIGITAL_L1)
+#define SHOOT (pros::E_CONTROLLER_DIGITAL_UP)
 #define DISP_ENCODERS (pros::E_CONTROLLER_DIGITAL_Y)
 #define TARE_ENCODERS (pros::E_CONTROLLER_DIGITAL_X)
 
@@ -37,14 +37,15 @@ int encBR = 0;
 int encBL = 0;
 int encAIM = 0;
 
+int aim_speed = 0;// p controller speed var
+
 // Start op-control function
 void opcontrol() {
-    autonomous();
-    pros::lcd::initialize();
-    pros::lcd::set_text(6, "Hello PROS User!");
+    //autonomous();
   // Initialize variables for left joystick y-value and right joystick x-value
   float YL = 0;
   float XR = 0;
+  float XL = 0;
 
   // Initialize variables for motor speeds
   int FL_speed = 0; // FL denotes front left motor
@@ -63,17 +64,24 @@ void opcontrol() {
     // Capture left joystick y-value and right joystick x-value
     YL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
     XR = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    XL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
 
     // Pass joystick values through a cubic function to provide smoother
     // driving operation
     YL = pow((YL/127),3) * 127;
-    XR = pow((XR/127),3) * 127;
+    XL = pow((XL/127),3) * 127;
+    //XR = pow((XR/127),3) * 127;
 
     // Compute speeds of each drive motor of the robot
-    FL_speed = YL+XR;
+    /*FL_speed = YL+XR;
     FR_speed = YL-XR;
     BL_speed = YL+XR;
-    BR_speed = YL-XR;
+    BR_speed = YL-XR;*/
+
+    FL_speed = YL+XL;
+    FR_speed = YL-XL;
+    BL_speed = YL+XL;
+    BR_speed = YL-XL;
 
     // if the SLOW_BUTTON is pressed, then half the speed. This allows for fine
     // control of the robot.
@@ -105,12 +113,20 @@ void opcontrol() {
 
     // Toggle launcher angle to upright position
     if(master.get_digital(AIM)){ //Need toggle for AIM
-      Motor_Drive.hold(launchAngle,AIM_SPEED);
+      encAIM = launchAngle.get_position();
+      if (encAIM >= MOTOR_LAUNCHER_ANGLE_MAX-10){
+        aim_speed = (MOTOR_LAUNCHER_ANGLE_MAX-encAIM);
+        Motor_Drive.hold(launchAngle,aim_speed);
+      }
+      else{
+        Motor_Drive.hold(launchAngle,AIM_SPEED);
+      }
+
     }
 
     // When held lower launcher angle
     else if(master.get_digital(LOWER)){ //Need bottom constraint for LOwer
-      Motor_Drive.hold(launchAngle,50);
+      Motor_Drive.hold(launchAngle,-50);
     }
     // When pushed cycle through one launch of shooter
     else if(master.get_digital(SHOOT)){ //Need Cycle for shoot
