@@ -17,7 +17,6 @@ using namespace std;
  * from where it left off.
  */
 void autonomous() {
-enum commands {intake, outtake, eject};
 int n = 2;
 int speed = 127;
 int arr[n][5] = {
@@ -37,18 +36,23 @@ for(int[] row: arr){
 }
 
 }
+*/}
 
 void moveTo(int FR,int FL,int BR,int BL,int speed){
 
   // FR
   frontRight.move_absolute(FR,speed)
+  frontRight.move_absolute(FR,speed);
 
   // FL
   frontRight.move_absolute(FL,speed)
+  frontRight.move_absolute(FL,speed);
 
   // BR
   backRight.move_absolute(BR,speed)
+  backRight.move_absolute(BR,speed);
 
   // BL
   backLeft.move_absolute(BL,speed)
+  backLeft.move_absolute(BL,speed);
  }
