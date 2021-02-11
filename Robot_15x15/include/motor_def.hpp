@@ -18,7 +18,6 @@
 #define MOTOR_INTAKE_RIGHT_PORT (3)
 #define INTAKE_SPEED  (127)
 #define OUTTAKE_SPEED (-INTAKE_SPEED)
-#define AIM_SPEED  (127)
 #define LAUNCH_SPEED  (127)
 
 // Launcher motors
