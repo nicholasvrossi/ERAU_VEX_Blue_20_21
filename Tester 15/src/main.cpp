@@ -1,8 +1,8 @@
 #include "main.h"
-#include "../../G_inc/source/InvKinematics.cpp"
-#include "../../G_inc/source/BasicMovement.cpp"
-#include "../../G_inc/source/GaussianMovement.cpp"
-#include "../../G_inc/source/AbstractMovement.cpp"
+#include "../../G_inc/headers/InvKinematics.hpp"
+#include "../../G_inc/headers/BasicMovement.hpp"
+#include "../../G_inc/headers/GaussianMovement.hpp"
+#include "../../G_inc/headers/AbstractMovement.hpp"
 #include <cmath>// OpControl.cpp 15x15 robot
 #include "motor_def.hpp"
 

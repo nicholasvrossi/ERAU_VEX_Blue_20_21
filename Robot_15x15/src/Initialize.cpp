@@ -7,7 +7,11 @@
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	
+
+    pros::lcd::initialize();
+
+	pros::lcd::set_text(6, "Hello PROS User!");
+    pros::delay(20);
 }
 
 /**

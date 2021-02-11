@@ -1,10 +1,11 @@
 // OpControl.cpp 15x15 robot
 
 #include "motor_def.hpp"
-#include "../../G_inc/source/InvKinematics.cpp"
+#include "InvKinematics.hpp"
 #include "main.h"
 #include "math.h"
 #include <iostream>
+#include <string>
 using namespace std;
 
 // Define button to be pressed that slows robot's speed
@@ -19,19 +20,37 @@ using namespace std;
 #define LOWER (pros::E_CONTROLLER_DIGITAL_DOWN)
 
 #define SHOOT (pros::E_CONTROLLER_DIGITAL_L1)
+#define DISP_ENCODERS (pros::E_CONTROLLER_DIGITAL_Y)
+#define TARE_ENCODERS (pros::E_CONTROLLER_DIGITAL_X)
+
+
+char str1[30];
+char str2[30];
+char str3[30];
+char str4[30];
+char str5[30];
+
+// initialize variables for storing encoder values
+int encFR = 0;
+int encFL = 0;
+int encBR = 0;
+int encBL = 0;
+int encAIM = 0;
 
 // Start op-control function
 void opcontrol() {
-
+    autonomous();
+    pros::lcd::initialize();
+    pros::lcd::set_text(6, "Hello PROS User!");
   // Initialize variables for left joystick y-value and right joystick x-value
   float YL = 0;
   float XR = 0;
 
   // Initialize variables for motor speeds
-  float FL_speed = 0; // FL denotes front left motor
-  float FR_speed = 0; // FR denotes front right motor
-  float BL_speed = 0; // BL denotes back left motor
-  float BR_speed = 0; // BR denotes back right motor
+  int FL_speed = 0; // FL denotes front left motor
+  int FR_speed = 0; // FR denotes front right motor
+  int BL_speed = 0; // BL denotes back left motor
+  int BR_speed = 0; // BR denotes back right motor
 
   // while loop used for maintaining opcontrol function
 	while (true) {
@@ -85,24 +104,60 @@ void opcontrol() {
 
 
     // Toggle launcher angle to upright position
-    if(master.get_degita(AIM)) //Need toggle for AIM
+    if(master.get_digital(AIM)){ //Need toggle for AIM
       Motor_Drive.hold(launchAngle,AIM_SPEED);
-
+    }
 
     // When held lower launcher angle
-    elseif(master.get_digital(LOWER)) //Need bottom constraint for LOwer
+    else if(master.get_digital(LOWER)){ //Need bottom constraint for LOwer
       Motor_Drive.hold(launchAngle,50);
-
+    }
     // When pushed cycle through one launch of shooter
-    elseif(master.get_digetal(SHOOT)) //Need Cycle for shoot
+    else if(master.get_digital(SHOOT)){ //Need Cycle for shoot
       Motor_Drive.hold(shootLeft,LAUNCH_SPEED);
       Motor_Drive.hold(shootRight,LAUNCH_SPEED);
-
+    }
     // When no launcher movement is needed motors are off
-    else
+    else{
       Motor_Drive.hold(shootLeft,0);
       Motor_Drive.hold(shootRight,0);
       Motor_Drive.hold(launchAngle,0);
+    }
+
+
+
+// Grab Encoder values
+      if(master.get_digital(DISP_ENCODERS)){
+        encFR = frontRight.get_position();
+        encFL = frontLeft.get_position();
+        encBR = backRight.get_position();
+        encBL = backLeft.get_position();
+        encAIM = launchAngle.get_position();
+        sprintf(str1, "FR = %d", encFR);
+        sprintf(str2, "FL = %d", encFL);
+        sprintf(str3, "BR = %d", encBR);
+        sprintf(str4, "BL = %d", encBL);
+        sprintf(str5, "AIM = %d", encAIM);
+        pros::lcd::set_text(1, str1);
+        pros::lcd::set_text(2, str2);
+        pros::lcd::set_text(3, str3);
+        pros::lcd::set_text(4, str4);
+        pros::lcd::set_text(5, str5);
+        pros::delay(20);
+      }
+      else if (master.get_digital(TARE_ENCODERS)){
+        frontRight.tare_position();
+        frontLeft.tare_position();
+        backRight.tare_position();
+        backLeft.tare_position();
+        launchAngle.tare_position();
+        pros::lcd::set_text(1, "FR = 0");
+        pros::lcd::set_text(2, "FL = 0");
+        pros::lcd::set_text(3, "BR = 0");
+        pros::lcd::set_text(4, "BL = 0");
+        pros::lcd::set_text(5, "AIM = 0");
+        pros::delay(20);
+      }
 
 	}
 }

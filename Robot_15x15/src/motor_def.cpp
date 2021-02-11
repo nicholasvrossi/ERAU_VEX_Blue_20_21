@@ -9,22 +9,22 @@ pros::Controller master(pros::E_CONTROLLER_MASTER);
 // Define and initialize motors
 pros::Motor frontLeft(MOTOR_FRONT_LEFT_PORT,
                       pros::E_MOTOR_GEARSET_18,
-                      false,
+                      true,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
 pros::Motor frontRight(MOTOR_FRONT_RIGHT_PORT,
                       pros::E_MOTOR_GEARSET_18,
-                      true,
+                      false,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
 pros::Motor backLeft(MOTOR_BACK_LEFT_PORT,
                       pros::E_MOTOR_GEARSET_18,
-                      false,
+                      true,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
 pros::Motor backRight(MOTOR_BACK_RIGHT_PORT,
                       pros::E_MOTOR_GEARSET_18,
-                      true,
+                      false,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
 pros::Motor inLeft(MOTOR_INTAKE_LEFT_PORT,
@@ -49,7 +49,7 @@ pros::Motor shootLeft(MOTOR_LAUNCHER_LEFT_SHOOTER ,
                       true,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
-pros::Motor shoootRight(MOTOR_LAUNCHER_RIGHT_SHOOTER ,
+pros::Motor shootRight(MOTOR_LAUNCHER_RIGHT_SHOOTER ,
                       pros::E_MOTOR_GEARSET_18,
                       false,
                       pros::E_MOTOR_ENCODER_COUNTS);
