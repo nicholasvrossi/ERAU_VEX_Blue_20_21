@@ -36,6 +36,9 @@ int encFL = 0;
 int encBR = 0;
 int encBL = 0;
 int encAIM = 0;
+=======
+#define SHOOT (pros::E_CONTROLLER_DIGITAL_A)
+>>>>>>> Stashed changes
 
 int aim_speed = 0;// p controller speed var
 
@@ -46,6 +49,9 @@ void opcontrol() {
   float YL = 0;
   float XR = 0;
   float XL = 0;
+
+  int Low = 0;
+  int cycle = 0;
 
   // Initialize variables for motor speeds
   int FL_speed = 0; // FL denotes front left motor
@@ -111,19 +117,28 @@ void opcontrol() {
     }
 
 
+    Low = launchAngle.get_position();
     // Toggle launcher angle to upright position
     if(master.get_digital(AIM)){ //Need toggle for AIM
-      encAIM = launchAngle.get_position();
-      if (encAIM >= MOTOR_LAUNCHER_ANGLE_MAX-10){
-        aim_speed = (MOTOR_LAUNCHER_ANGLE_MAX-encAIM);
-        Motor_Drive.hold(launchAngle,aim_speed);
-      }
-      else{
-        Motor_Drive.hold(launchAngle,AIM_SPEED);
+      if (lastButtonState==1){
+          Motor_Drive.hold(launchAngle,AIM_UP);
+          encAIM = launchAngle.get_position();
+          if (encAIM >= MOTOR_LAUNCHER_ANGLE_MAX-10){
+            aim_speed = (MOTOR_LAUNCHER_ANGLE_MAX-encAIM);
+            Motor_Drive.hold(launchAngle,aim_speed);
+          }
+
+          else{
+            Motor_Drive.hold(launchAngle,AIM_SPEED);
+          }
       }
 
     }
 
+    //Stops lowering the launcher at a certain point
+    if ((Low)<=(0)){
+        Motor_Drive.hold(launchAngle,0);
+      }
     // When held lower launcher angle
     else if(master.get_digital(LOWER)){ //Need bottom constraint for LOwer
       Motor_Drive.hold(launchAngle,-50);
