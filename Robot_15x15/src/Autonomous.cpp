@@ -3,6 +3,7 @@
 #include "math.h"
 #include <iostream>
 #include <vector>
+#include <cmath>
 using namespace std;
 
 void moveTo(int FR,int FL,int BR,int BL,int speed);
@@ -28,70 +29,131 @@ enum commands {intake, outtake, aim, lower, shoot};
 };*/
 //enum commands {intake, outtake, eject};
 //const int n = 2;
-int speed = 110;
+int speed = 100;
 int encAIM = 0;
 int encAIM_goal = 0;
+int enc_shootLeft = 0;
+int pauseTime = 0;
 
-int numCounts = 20000; // While Loop limit
+int encFR = 0;
+int encFL = 0;
+int encBR = 0;
+int encBL = 0;
+
+int ii = 0;
+int error0 = 0;
+int error1 = 0;
+int error2 = 0;
+int error3 = 0;
+
+
+int numCounts = 500000; // While Loop limit
 vector<vector<int> > arr = {
-    {1000,1000 ,1000, 1000,1000 ,0},
-    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,0},
-    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,1},
-    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,2},
-    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,3},
-    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,4},
-    {-1100,-1100 ,-1100 ,-1100 ,-1100 ,5}
+    {1000,1000 ,1000, 1000,speed ,-1},
+    {-1100,-1100 ,-1100 ,-1100 ,speed ,-1},
+    {0,0 ,0 ,0 ,speed ,intake},
+    {0,0 ,0 ,0 ,speed ,outtake},
+    {0,0 ,0 ,0 ,speed ,aim},
+    {0,0 ,0 ,0 ,speed ,lower},
+    {0,0 ,0 ,0 ,speed ,shoot}
 };
 
 for(vector<int> row: arr){
   if (row[5] == intake){
+    cout << "hi 1" << endl;
     inLeft.move(INTAKE_SPEED);
     inRight.move(INTAKE_SPEED);
+    pauseTime = 3000;
+
   }
   else if (row[5] == outtake){
+    cout << "hi 2" << endl;
     inLeft.move(OUTTAKE_SPEED);
     inRight.move(OUTTAKE_SPEED);
+    pauseTime = 1000;
+
   }
   else if (row[5] == aim){
+    cout << "hi 3" << endl;
     inLeft.move(0);
     inRight.move(0);
     encAIM_goal = 177;
+    encAIM = launchAngle.get_position();
+    while (abs(encAIM) < abs(encAIM_goal)){
+      launchAngle.move(50);
+      encAIM = launchAngle.get_position();
+    }
+    launchAngle.move(20);
+    pauseTime = 3000;
+
   }
   else if(row[5] == lower){
+    cout << "hi 4" << endl;
     inLeft.move(0);
     inRight.move(0);
+    encAIM_goal = 0;
+    encAIM = launchAngle.get_position();
+    while (encAIM > 20){
+      launchAngle.move(-10);
+      encAIM = launchAngle.get_position();
+    }
+    launchAngle.move(0);
+    pauseTime = 3000;
+
   }
   else if(row[5] == shoot){
+    cout << "hi 5" << endl;
     inLeft.move(0);
     inRight.move(0);
+    enc_shootLeft = shootLeft.get_position();
+    while (enc_shootLeft < 4100){
+      shootLeft.move(127);
+      shootRight.move(127);
+      enc_shootLeft = shootLeft.get_position();
+    }
+    shootLeft.tare_position();
+    shootLeft.move(0);
+    shootRight.move(0);
+    pauseTime = 3000;
+
   }
   else{
+    cout << "hi 0" << endl;
     inLeft.move(0);
     inRight.move(0);
-}
+    pauseTime = 1000;
+  }
 
-  int speed = row[4];
-  int ii = 0;
-  int error0 = 0;
-  int error1 = 0;
-  int error2 = 0;
-  int error3 = 0;
-
+  speed = row[4];
+  ii = 0;
 
   frontRight.tare_position();
   frontLeft.tare_position();
   backRight.tare_position();
   backLeft.tare_position();
 
-  while((ii <= numCounts) || (error0 < (error0 - 5) &  error1 < (error1 - 5) & error2 < (error2 - 5) & error3 < (error3 - 5))){
+  encFR = frontRight.get_position();
+  encFL = frontLeft.get_position();
+  encBR = backRight.get_position();
+  encBL = backLeft.get_position();
+
+  cout << "hello!" << endl;
   moveTo(row[0],row[1],row[2],row[3],speed);
-  ii++;
+
+  while((ii <= numCounts) && ((abs(encFR) < (abs(row[0]) - 20)) && (abs(encFL) < (abs(row[1]) - 20)))){
+    ii++;
+    cout << ii << endl;;
+    encFR = frontRight.get_position();
+    encFL = frontLeft.get_position();
+    encBR = backRight.get_position();
+    encBL = backLeft.get_position();
   }
   frontRight.move(0);
   frontLeft.move(0);
   backRight.move(0);
   backLeft.move(0);
-  pros::delay(500);
+  // pros::delay(pauseTime);
+  pros::delay(3000);
 }
 
 }
