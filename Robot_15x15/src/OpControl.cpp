@@ -19,9 +19,10 @@ using namespace std;
 
 #define LOWER (pros::E_CONTROLLER_DIGITAL_L2)
 
-#define SHOOT (pros::E_CONTROLLER_DIGITAL_UP)
 #define DISP_ENCODERS (pros::E_CONTROLLER_DIGITAL_Y)
 #define TARE_ENCODERS (pros::E_CONTROLLER_DIGITAL_X)
+
+#define MANUAL_LOWER (pros::E_CONTROLLER_DIGITAL_DOWN)
 
 
 char str1[30];
@@ -36,9 +37,13 @@ int encFL = 0;
 int encBR = 0;
 int encBL = 0;
 int encAIM = 0;
-=======
+int encSR = 0;
+int encSL = 0;
+int shoot_goal = 0;
+
+
 #define SHOOT (pros::E_CONTROLLER_DIGITAL_A)
->>>>>>> Stashed changes
+
 
 int aim_speed = 0;// p controller speed var
 
@@ -50,8 +55,10 @@ void opcontrol() {
   float XR = 0;
   float XL = 0;
 
-  int Low = 0;
   int cycle = 0;
+  int lowerSpeed = 0;
+  int shoot_on = 0;
+  int aim_goal = 0;
 
   // Initialize variables for motor speeds
   int FL_speed = 0; // FL denotes front left motor
@@ -61,6 +68,7 @@ void opcontrol() {
 
   // while loop used for maintaining opcontrol function
 	while (true) {
+
     // Construct instance of InvKinematics class to use motor driving functions
     // found in the InvKinematics class.
     InvKinematics Motor_Drive;
@@ -117,44 +125,66 @@ void opcontrol() {
     }
 
 
-    Low = launchAngle.get_position();
+    encAIM = launchAngle.get_position();
     // Toggle launcher angle to upright position
-    if(master.get_digital(AIM)){ //Need toggle for AIM
-      if (lastButtonState==1){
-          Motor_Drive.hold(launchAngle,AIM_UP);
-          encAIM = launchAngle.get_position();
-          if (encAIM >= MOTOR_LAUNCHER_ANGLE_MAX-10){
-            aim_speed = (MOTOR_LAUNCHER_ANGLE_MAX-encAIM);
-            Motor_Drive.hold(launchAngle,aim_speed);
-          }
 
-          else{
-            Motor_Drive.hold(launchAngle,AIM_SPEED);
-          }
-      }
-
-    }
 
     //Stops lowering the launcher at a certain point
-    if ((Low)<=(0)){
-        Motor_Drive.hold(launchAngle,0);
-      }
+    //if ((Low)<=(0)){
+      //  launchAngle.move(0);
+      //}
     // When held lower launcher angle
-    else if(master.get_digital(LOWER)){ //Need bottom constraint for LOwer
-      Motor_Drive.hold(launchAngle,-50);
+    if(master.get_digital(LOWER)){ //Need bottom constraint for Lower
+      aim_goal = 0;
     }
-    // When pushed cycle through one launch of shooter
-    else if(master.get_digital(SHOOT)){ //Need Cycle for shoot
-      Motor_Drive.hold(shootLeft,LAUNCH_SPEED);
-      Motor_Drive.hold(shootRight,LAUNCH_SPEED);
-    }
-    // When no launcher movement is needed motors are off
-    else{
-      Motor_Drive.hold(shootLeft,0);
-      Motor_Drive.hold(shootRight,0);
-      Motor_Drive.hold(launchAngle,0);
+    else if(master.get_digital(AIM)){ //Need toggle for AIM
+      aim_goal = 1;
     }
 
+    if (aim_goal == 0){
+      if(master.get_digital(MANUAL_LOWER)){
+        launchAngle.move(-60);
+      }
+      else if (encAIM >= 25){
+        aim_speed = -AIM_SPEED;
+      }
+      else{
+        aim_speed = 0;
+      }
+    }
+
+    else if (aim_goal == 1){
+      if (encAIM >= MOTOR_LAUNCHER_ANGLE_MAX-10){
+        aim_speed = ((MOTOR_LAUNCHER_ANGLE_MAX-encAIM) + 5);
+      }
+      else{
+        aim_speed = AIM_SPEED;
+      }
+    }
+
+    encSR = shootLeft.get_position();
+    encSL = shootRight.get_position();
+    // When pushed cycle through one launch of shooter
+    if(master.get_digital(SHOOT)){
+      shoot_on = 1;
+      shoot_goal = SHOOT_MAX;
+    }
+    // When no launcher movement is needed motors are off
+    if ((encSR < shoot_goal) && (shoot_on == 1)){
+      shootLeft.move(127);
+      shootRight.move(127);
+    }
+    else if((encSR >= shoot_goal) && (shoot_on == 1)){
+      shootLeft.move(-127);
+      shootRight.move(-127);
+      shootLeft.tare_position();
+      shootRight.tare_position();
+      shootLeft.move(0);
+      shootRight.move(0);
+      shoot_on = 0;
+    }
+
+    launchAngle.move(aim_speed);
 
 
 // Grab Encoder values

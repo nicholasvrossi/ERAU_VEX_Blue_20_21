@@ -8,7 +8,7 @@
 #define IS_RED (1)
 
 // Define the four drive motors
-#define MOTOR_FRONT_LEFT_PORT (1)
+#define MOTOR_FRONT_LEFT_PORT (12)
 #define MOTOR_FRONT_RIGHT_PORT (2)
 #define MOTOR_BACK_LEFT_PORT (10)
 #define MOTOR_BACK_RIGHT_PORT (8)
@@ -18,8 +18,9 @@
 #define MOTOR_INTAKE_RIGHT_PORT (9)
 #define INTAKE_SPEED  (127)
 #define OUTTAKE_SPEED (-INTAKE_SPEED)
-#define AIM_SPEED  (127)
+#define AIM_SPEED  (98)
 #define LAUNCH_SPEED  (127)
+#define SHOOT_MAX (2010)
 
 // Launcher motors
 #define MOTOR_LAUNCHER_ANGLE_MAX (177)
