@@ -19,6 +19,10 @@ void moveTo(int FR,int FL,int BR,int BL,int speed);
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
+vector<int> waypoint(int fr, int fl, int br, int bl, float speed, int cmd) {
+    vector<int> way = {fr, fl, br, bl, (int) speed, cmd};
+    return way;
+}
 void autonomous() {
 enum commands {intake, outtake, aim, lower, shoot};
 //int n = 2;
@@ -41,33 +45,36 @@ int encBR = 0;
 int encBL = 0;
 
 int ii = 0;
+int jj = 0;
 int error0 = 0;
 int error1 = 0;
 int error2 = 0;
 int error3 = 0;
 
+int aimVel = 0;
+int aim_speed = 0;
+
 
 int numCounts = 500000; // While Loop limit
 // FR, FL, BR, BL, speed, command
 vector<vector<int> > arr = {
-    { -300,  -300,  -300,  -300, (int) (speed * .5), -1},
-    { -500,   500,  -500,   500, (int) (speed * .5), -1},
-    { 2300,  2300,  2300,  2300, (int) (speed * .5), -1},
-    {  400,  -400,   400,  -400, (int) (speed * .5), -1},
-    { -400,   400,  -400,   400, (int) (speed * .5), -1},
-    { 2220,  2220,  2220,  2220, (int) (speed * .5), -1},
-    {  300,  -300,   300,  -300, (int) (speed * .5), -1},
-    {  500,   500,   500,   500, (int) (speed * .5), -1},
-    {-1200, -1200, -1200, -1200, (int) (speed * .5), -1},
-    { -175,   175,  -175,   175, (int) (speed * .5), -1},
-    { 1200,  1200,  1200,  1200, (int) (speed * .5), -1}
-    //{0, 0,0, 0,speed ,aim}
-    /*{0,0,0 ,0 ,speed ,-1},
-    {0,0 ,0 ,0 ,speed ,intake},
-    {0,0 ,0 ,0 ,speed ,outtake},
-    {0,0 ,0 ,0 ,speed ,aim},
-    {0,0 ,0 ,0 ,speed ,lower},
-    {0,0 ,0 ,0 ,speed ,shoot}*/
+    waypoint(-365, -365, -365, -365, speed * .5, intake),
+    waypoint(0,0,0,0,speed,aim),
+    waypoint(0,0,0,0,speed,shoot),
+    waypoint(0,0,0,0,speed,lower),
+    waypoint(-582,582,-582,582,speed*.5,-1),
+    waypoint(2900,2900,2900,2900,speed*.5,intake),
+    waypoint(0,0,0,0,speed,aim),
+    waypoint(425,-425,425,-425, speed*.5,-1),
+    waypoint(-130,-130,-130,-130,speed*.5,-1),
+    waypoint(0,0,0,0,speed,shoot),
+    waypoint(0,0,0,0,speed,lower),
+    waypoint(965,-965,965,-965,speed*.5,-1),
+    waypoint(810,810,810,810,speed*.5,intake),
+    waypoint(950,-950,950,-950,speed*.5,-1),
+    waypoint(0,0,0,0,speed,aim),
+    waypoint(750,750,750,750,speed*.5,-1),
+    waypoint(0,0,0,0,speed,shoot)
 };
 
 for(vector<int> row: arr){
@@ -89,13 +96,23 @@ for(vector<int> row: arr){
     cout << "hi 3" << endl;
     inLeft.move(0);
     inRight.move(0);
-    encAIM_goal = 177;
+    encAIM_goal = 155;
     encAIM = launchAngle.get_position();
-    while (abs(encAIM) < abs(encAIM_goal)){
-      launchAngle.move(100);
+    while ((abs(encAIM) < abs(encAIM_goal)) ||(jj < 50000)){
+      if (encAIM >= 0){
+        aimVel = launchAngle.get_actual_velocity();
+        aim_speed = ((MOTOR_LAUNCHER_ANGLE_MAX-encAIM) + 20) - 1*aimVel;
+      }
+      else{
+        aim_speed = AIM_SPEED;
+      }
       encAIM = launchAngle.get_position();
+      launchAngle.move(aim_speed);
+      launchAngleLeft.move(aim_speed);
+      jj++;
     }
-    launchAngle.move(70);
+    launchAngle.move(30);
+    launchAngleLeft.move(30);
     pauseTime = 3000;
 
   }
@@ -107,9 +124,11 @@ for(vector<int> row: arr){
     encAIM = launchAngle.get_position();
     while (encAIM > 20){
       launchAngle.move(-10);
+      launchAngleLeft.move(-10);
       encAIM = launchAngle.get_position();
     }
     launchAngle.move(0);
+    launchAngleLeft.move(0);
     pauseTime = 3000;
 
   }
@@ -166,6 +185,11 @@ for(vector<int> row: arr){
   backLeft.move(0);
   // pros::delay(pauseTime);
   pros::delay(3000);
+  if (row[5] == intake){
+    inLeft.move(0);
+    inRight.move(0);
+    pros::delay(500);
+  }
 }
 
 }

@@ -23,6 +23,7 @@ using namespace std;
 #define TARE_ENCODERS (pros::E_CONTROLLER_DIGITAL_X)
 
 #define MANUAL_LOWER (pros::E_CONTROLLER_DIGITAL_DOWN)
+#define AUTON (pros::E_CONTROLLER_DIGITAL_RIGHT)
 
 
 char str1[30];
@@ -46,10 +47,11 @@ int shoot_goal = 0;
 
 
 int aim_speed = 0;// p controller speed var
+int aimVel = 0;
 
 // Start op-control function
 void opcontrol() {
-  autonomous();
+  //autonomous();
   // Initialize variables for left joystick y-value and right joystick x-value
   float YL = 0;
   float XR = 0;
@@ -68,7 +70,9 @@ void opcontrol() {
 
   // while loop used for maintaining opcontrol function
 	while (true) {
-
+    if (master.get_digital(AUTON)){
+      autonomous();
+    }
     // Construct instance of InvKinematics class to use motor driving functions
     // found in the InvKinematics class.
     InvKinematics Motor_Drive;
@@ -141,11 +145,13 @@ void opcontrol() {
       aim_goal = 1;
     }
 
+    if(master.get_digital(MANUAL_LOWER)){
+      launchAngle.move(-127);
+      launchAngleLeft.move(-127);
+    }
+
     if (aim_goal == 0){
-      if(master.get_digital(MANUAL_LOWER)){
-        launchAngle.move(-60);
-      }
-      else if (encAIM >= 25){
+      if (encAIM >= 40){
         aim_speed = -AIM_SPEED;
       }
       else{
@@ -154,8 +160,9 @@ void opcontrol() {
     }
 
     else if (aim_goal == 1){
-      if (encAIM >= MOTOR_LAUNCHER_ANGLE_MAX-10){
-        aim_speed = ((MOTOR_LAUNCHER_ANGLE_MAX-encAIM) + 50);
+      if (encAIM >= 0){
+        aimVel = launchAngle.get_actual_velocity();
+        aim_speed = ((MOTOR_LAUNCHER_ANGLE_MAX-encAIM) + 20) - 1*aimVel;
       }
       else{
         aim_speed = AIM_SPEED;
@@ -185,6 +192,7 @@ void opcontrol() {
     }
 
     launchAngle.move(aim_speed);
+    launchAngleLeft.move(aim_speed);
 
 
 // Grab Encoder values

@@ -44,6 +44,12 @@ pros::Motor launchAngle(MOTOR_LAUNCHER_ANGLE,
                       true,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
+pros::Motor launchAngleLeft(MOTOR_LEFT_AIM,
+                      pros::E_MOTOR_GEARSET_18,
+                      false,
+                      pros::E_MOTOR_ENCODER_COUNTS);
+
+
 pros::Motor shootLeft(MOTOR_LAUNCHER_LEFT_SHOOTER ,
                       pros::E_MOTOR_GEARSET_18,
                       true,
