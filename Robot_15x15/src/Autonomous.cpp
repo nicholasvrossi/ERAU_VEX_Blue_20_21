@@ -62,19 +62,51 @@ vector<vector<int> > arr = {
     waypoint(0,0,0,0,speed,aim),
     waypoint(0,0,0,0,speed,shoot),
     waypoint(0,0,0,0,speed,lower),
-    waypoint(-582,582,-582,582,speed*.5,-1),
+    waypoint(-583,583,-583,583,speed*.5,-1),
     waypoint(2900,2900,2900,2900,speed*.5,intake),
     waypoint(0,0,0,0,speed,aim),
     waypoint(425,-425,425,-425, speed*.5,-1),
     waypoint(-130,-130,-130,-130,speed*.5,-1),
     waypoint(0,0,0,0,speed,shoot),
     waypoint(0,0,0,0,speed,lower),
-    waypoint(965,-965,965,-965,speed*.5,-1),
+    /*waypoint(-965,965,-965,965,speed*.5,-1),
     waypoint(810,810,810,810,speed*.5,intake),
     waypoint(950,-950,950,-950,speed*.5,-1),
     waypoint(0,0,0,0,speed,aim),
     waypoint(750,750,750,750,speed*.5,-1),
-    waypoint(0,0,0,0,speed,shoot)
+    waypoint(0,0,0,0,speed,shoot),*/
+    waypoint(-513,-513,-513,-513,speed*.5,-1),
+    waypoint(-490,490,-490,490,speed*.5,-1),
+    waypoint(3000,3000,3000,3000,speed*.5,intake),
+    waypoint(0,0,0,0,speed,aim),
+    waypoint(-1000,-1000,-1000,-1000,speed*.5,-1),
+    waypoint(250,-250,250,-250,speed*.5,-1),
+    waypoint(1000,1000,1000,1000,speed*.5,-1),
+    waypoint(0,0,0,0,speed*.5,shoot),
+    waypoint(-1000,-1000,-1000,-1000,speed*.5,lower),
+    waypoint(270,-270,270,-270,speed*.5,-1),
+    waypoint(1000,1000,1000,1000,speed*.5,intake),
+    waypoint(0,0,0,0,speed,aim),
+    waypoint(0,0,0,0,speed*.5,shoot),
+    waypoint(0,0,0,0,speed,lower),
+    waypoint(-1430,-1430,-1430,-1430,speed*.5,-1),
+    waypoint(225,-225,225,-225,speed*.5,-1),
+    waypoint(1500,1500,1500,1500,speed*.5,intake),
+    waypoint(0,0,0,0,speed,aim),
+    waypoint(-3150,-3150,-3150,-3150,speed*.5,-1),
+    waypoint(-475,475,-475,475,speed*.5,-1),
+    waypoint(550,550,550,550,speed*.5,-1),
+    waypoint(0,0,0,0,speed,shoot),
+    waypoint(0,0,0,0,speed,lower),
+    waypoint(-525,525,-525, 525,speed*.5,-1),
+    waypoint(3000,3000,3000,3000,speed*.5,intake),
+    waypoint(0,0,0,0,speed,aim),
+    waypoint(-570,-570,-570,-570,speed*.5,-1),
+    waypoint(330,-330,330,-330,speed*.5,-1),
+    waypoint(300,300,300,300,speed*.5,-1),
+    waypoint(0,0,0,0,speed,shoot),
+    waypoint(-300,-300,-300,-300,speed*.5,lower),
+    waypoint(-700,700,-700,700,speed*.5,-1)
 };
 
 for(vector<int> row: arr){
@@ -123,8 +155,8 @@ for(vector<int> row: arr){
     encAIM_goal = 0;
     encAIM = launchAngle.get_position();
     while (encAIM > 20){
-      launchAngle.move(-10);
-      launchAngleLeft.move(-10);
+      launchAngle.move(-45);
+      launchAngleLeft.move(-45);
       encAIM = launchAngle.get_position();
     }
     launchAngle.move(0);
@@ -137,7 +169,7 @@ for(vector<int> row: arr){
     inLeft.move(0);
     inRight.move(0);
     enc_shootLeft = shootLeft.get_position();
-    while (enc_shootLeft < 4100){
+    while (enc_shootLeft < 2300){
       shootLeft.move(127);
       shootRight.move(127);
       enc_shootLeft = shootLeft.get_position();
@@ -184,7 +216,7 @@ for(vector<int> row: arr){
   backRight.move(0);
   backLeft.move(0);
   // pros::delay(pauseTime);
-  pros::delay(3000);
+  pros::delay(1500);
   if (row[5] == intake){
     inLeft.move(0);
     inRight.move(0);
