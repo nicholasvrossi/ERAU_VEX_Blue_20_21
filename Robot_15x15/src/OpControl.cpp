@@ -49,7 +49,7 @@ int aim_speed = 0;// p controller speed var
 
 // Start op-control function
 void opcontrol() {
-    //autonomous();
+  autonomous();
   // Initialize variables for left joystick y-value and right joystick x-value
   float YL = 0;
   float XR = 0;
@@ -155,7 +155,7 @@ void opcontrol() {
 
     else if (aim_goal == 1){
       if (encAIM >= MOTOR_LAUNCHER_ANGLE_MAX-10){
-        aim_speed = ((MOTOR_LAUNCHER_ANGLE_MAX-encAIM) + 5);
+        aim_speed = ((MOTOR_LAUNCHER_ANGLE_MAX-encAIM) + 50);
       }
       else{
         aim_speed = AIM_SPEED;

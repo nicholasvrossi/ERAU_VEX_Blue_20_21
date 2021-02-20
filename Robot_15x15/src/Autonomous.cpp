@@ -48,14 +48,26 @@ int error3 = 0;
 
 
 int numCounts = 500000; // While Loop limit
+// FR, FL, BR, BL, speed, command
 vector<vector<int> > arr = {
-    {1000,1000 ,1000, 1000,speed ,-1},
-    {-1100,-1100 ,-1100 ,-1100 ,speed ,-1},
+    { -300,  -300,  -300,  -300, (int) (speed * .5), -1},
+    { -500,   500,  -500,   500, (int) (speed * .5), -1},
+    { 2300,  2300,  2300,  2300, (int) (speed * .5), -1},
+    {  400,  -400,   400,  -400, (int) (speed * .5), -1},
+    { -400,   400,  -400,   400, (int) (speed * .5), -1},
+    { 2220,  2220,  2220,  2220, (int) (speed * .5), -1},
+    {  300,  -300,   300,  -300, (int) (speed * .5), -1},
+    {  500,   500,   500,   500, (int) (speed * .5), -1},
+    {-1200, -1200, -1200, -1200, (int) (speed * .5), -1},
+    { -175,   175,  -175,   175, (int) (speed * .5), -1},
+    { 1200,  1200,  1200,  1200, (int) (speed * .5), -1}
+    //{0, 0,0, 0,speed ,aim}
+    /*{0,0,0 ,0 ,speed ,-1},
     {0,0 ,0 ,0 ,speed ,intake},
     {0,0 ,0 ,0 ,speed ,outtake},
     {0,0 ,0 ,0 ,speed ,aim},
     {0,0 ,0 ,0 ,speed ,lower},
-    {0,0 ,0 ,0 ,speed ,shoot}
+    {0,0 ,0 ,0 ,speed ,shoot}*/
 };
 
 for(vector<int> row: arr){
@@ -80,10 +92,10 @@ for(vector<int> row: arr){
     encAIM_goal = 177;
     encAIM = launchAngle.get_position();
     while (abs(encAIM) < abs(encAIM_goal)){
-      launchAngle.move(50);
+      launchAngle.move(100);
       encAIM = launchAngle.get_position();
     }
-    launchAngle.move(20);
+    launchAngle.move(70);
     pauseTime = 3000;
 
   }

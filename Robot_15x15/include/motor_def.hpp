@@ -18,7 +18,7 @@
 #define MOTOR_INTAKE_RIGHT_PORT (9)
 #define INTAKE_SPEED  (127)
 #define OUTTAKE_SPEED (-INTAKE_SPEED)
-#define AIM_SPEED  (98)
+#define AIM_SPEED  (110)
 #define LAUNCH_SPEED  (127)
 #define SHOOT_MAX (2010)
 
