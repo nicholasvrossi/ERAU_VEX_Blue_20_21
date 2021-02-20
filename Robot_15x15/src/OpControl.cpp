@@ -71,7 +71,7 @@ void opcontrol() {
   // while loop used for maintaining opcontrol function
 	while (true) {
     if (master.get_digital(AUTON)){
-      autonomous();
+      //autonomous();
     }
     // Construct instance of InvKinematics class to use motor driving functions
     // found in the InvKinematics class.
@@ -197,7 +197,7 @@ void opcontrol() {
 
 // Grab Encoder values
       if(master.get_digital(DISP_ENCODERS)){
-        encFR = frontRight.get_position();
+        /*encFR = frontRight.get_position();
         encFL = frontLeft.get_position();
         encBR = backRight.get_position();
         encBL = backLeft.get_position();
@@ -212,10 +212,10 @@ void opcontrol() {
         pros::lcd::set_text(3, str3);
         pros::lcd::set_text(4, str4);
         pros::lcd::set_text(5, str5);
-        pros::delay(20);
+        pros::delay(20);*/
       }
       else if (master.get_digital(TARE_ENCODERS)){
-        frontRight.tare_position();
+        /*frontRight.tare_position();
         frontLeft.tare_position();
         backRight.tare_position();
         backLeft.tare_position();
@@ -225,7 +225,7 @@ void opcontrol() {
         pros::lcd::set_text(3, "BR = 0");
         pros::lcd::set_text(4, "BL = 0");
         pros::lcd::set_text(5, "AIM = 0");
-        pros::delay(20);
+        pros::delay(20);*/
       }
 
 	}
