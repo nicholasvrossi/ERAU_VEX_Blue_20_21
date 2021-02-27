@@ -6,6 +6,12 @@
 #include <cmath>
 using namespace std;
 
+#define TURN90_L (-500)
+#define TURN90_R (500)
+#define TURNN90_L (500)
+#define TURNN90_R (-500)
+
+
 void moveTo(int FR,int FL,int BR,int BL,int speed);
 
 /**
@@ -23,8 +29,11 @@ vector<int> waypoint(int fr, int fl, int br, int bl, float speed, int cmd) {
     vector<int> way = {fr, fl, br, bl, (int) speed, cmd};
     return way;
 }
+
+enum {intake, outtake, aim, lower, shoot} commands;
+
 void autonomous() {
-enum commands {intake, outtake, aim, lower, shoot};
+
 //int n = 2;
 //int speed = 127;
 /*int arr[n][5] = {
@@ -57,12 +66,12 @@ int aim_speed = 0;
 
 int numCounts = 500000; // While Loop limit
 // FR, FL, BR, BL, speed, command
-vector<vector<int> > arr = {
-    waypoint(-365, -365, -365, -365, speed * .5, intake),
+vector<vector<int> > arr = { // original
+    /*waypoint(-365, -365, -365, -365, speed * .5, intake),
     waypoint(0,0,0,0,speed,aim),
     waypoint(0,0,0,0,speed,shoot),
     waypoint(0,0,0,0,speed,lower),
-    waypoint(-583,583,-583,583,speed*.5,-1),
+    waypoint(-580,580,-580,580,speed*.5,-1),
     waypoint(2900,2900,2900,2900,speed*.5,intake),
     waypoint(0,0,0,0,speed,aim),
     waypoint(425,-425,425,-425, speed*.5,-1),
@@ -75,7 +84,7 @@ vector<vector<int> > arr = {
     waypoint(0,0,0,0,speed,aim),
     waypoint(750,750,750,750,speed*.5,-1),
     waypoint(0,0,0,0,speed,shoot),*/
-    waypoint(-513,-513,-513,-513,speed*.5,-1),
+    /*waypoint(-513,-513,-513,-513,speed*.5,-1),
     waypoint(-490,490,-490,490,speed*.5,-1),
     waypoint(3000,3000,3000,3000,speed*.5,intake),
     waypoint(0,0,0,0,speed,aim),
@@ -106,8 +115,9 @@ vector<vector<int> > arr = {
     waypoint(300,300,300,300,speed*.5,-1),
     waypoint(0,0,0,0,speed,shoot),
     waypoint(-300,-300,-300,-300,speed*.5,lower),
-    waypoint(-700,700,-700,700,speed*.5,-1)
-};
+    waypoint(-700,700,-700,700,speed*.5,-1)*/
+    waypoint(-500,500,-500,500,speed*0.3,-1)
+  };
 
 for(vector<int> row: arr){
   if (row[5] == intake){
@@ -239,4 +249,14 @@ void moveTo(int FR,int FL,int BR,int BL,int speed){
 
   // BL
   backLeft.move_absolute(BL,speed);
+ }
+
+ vector<int> turn90(int speed, enum commands var){
+   vector<int> way = waypoint(TURN90_R, TURN90_L, TURN90_R, TURN90_L, speed, var);
+   return way;
+ }
+
+ vector<int> turnN90(int speed, enum commands var){
+   vector<int> way = waypoint(TURNN90_R, TURNN90_L, TURNN90_R, TURNN90_L, speed, var);
+   return way;
  }
