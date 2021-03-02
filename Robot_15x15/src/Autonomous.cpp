@@ -63,6 +63,8 @@ int error3 = 0;
 int aimVel = 0;
 int aim_speed = 0;
 
+int deltaTime = 0;
+
 
 int numCounts = 500000; // While Loop limit
 // FR, FL, BR, BL, speed, command
@@ -200,6 +202,7 @@ for(vector<int> row: arr){
   speed = row[4];
   ii = 0;
 
+  // PID DRIVING SECTION
   frontRight.tare_position();
   frontLeft.tare_position();
   backRight.tare_position();
@@ -211,15 +214,43 @@ for(vector<int> row: arr){
   encBL = backLeft.get_position();
 
   cout << "hello!" << endl;
-  moveTo(row[0],row[1],row[2],row[3],speed);
 
-  while((ii <= numCounts) && ((abs(encFR) < (abs(row[0]) - 20)) && (abs(encFL) < (abs(row[1]) - 20)))){
+  errorFR = abs(row[0] - encFR);
+  errorFL = abs(row[1] - encFL);
+  errorBR = abs(row[2] - encBR);
+  errorBL = abs(row[3] - encBL);
+  while((ii <= numCounts) && (errorFR > 1) && (errorFL > 1) && (errorBR > 1) && (errorBL > 1)){
     ii++;
     cout << ii << endl;;
     encFR = frontRight.get_position();
     encFL = frontLeft.get_position();
     encBR = backRight.get_position();
     encBL = backLeft.get_position();
+
+    int timestamp = pros::millis();
+    deltaTime = pros::millis() - timestamp
+
+    // proportion
+    int64_t error = target - motor.get_position();
+    errorAtZero = error == 0;
+
+    // integral
+    if (errorAtZero || abs(error) > consts.integralActiveRange)
+      vars[i]->integral = 0;
+    else
+      vars[i]->integral += error * deltaTime;
+
+    // derivative
+    vars[i]->derivative = (error - vars[i]->lastError) / deltaTime;
+    vars[i]->lastError = error;
+    derivativeAtZero = vars[i]->derivative == 0;
+
+    // set motor speed
+    int speed = consts.Kp * error +
+                consts.Ki * vars[i]->integral +
+                consts.Kd * vars[i]->derivative;
+    speed = std::clamp(speed, -127, 127);
+    moveTo(row[0],row[1],row[2],row[3],speed);
   }
   frontRight.move(0);
   frontLeft.move(0);
@@ -236,7 +267,7 @@ for(vector<int> row: arr){
 
 }
 
-void moveTo(int FR,int FL,int BR,int BL,int speed){
+/*void moveTo(int FR,int FL,int BR,int BL,int speed){
 
   // FR
   frontRight.move_absolute(FR,speed);
@@ -249,6 +280,20 @@ void moveTo(int FR,int FL,int BR,int BL,int speed){
 
   // BL
   backLeft.move_absolute(BL,speed);
+}*/
+
+ void moveTo(int FR,int FL,int BR,int BL,int speedFR, int speedFL, int speedBR, int speedBL){
+   // FR
+   frontRight.move(speedFR);
+
+   // FL
+   frontLeft.move(speedFL);
+
+   // BR
+   backRight.move(speedBR);
+
+   // BL
+   backLeft.move(speedBL)
  }
 
  vector<int> turn90(int speed, enum commands var){
