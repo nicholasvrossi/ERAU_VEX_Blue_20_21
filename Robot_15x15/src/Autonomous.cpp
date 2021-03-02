@@ -181,12 +181,12 @@ for(vector<int> row: arr){
     inLeft.move(0);
     inRight.move(0);
     enc_shootLeft = shootLeft.get_position();
+    shootLeft.tare_position();
     while (enc_shootLeft < 2300){
       shootLeft.move(127);
       shootRight.move(127);
       enc_shootLeft = shootLeft.get_position();
     }
-    shootLeft.tare_position();
     shootLeft.move(0);
     shootRight.move(0);
     pauseTime = 3000;
