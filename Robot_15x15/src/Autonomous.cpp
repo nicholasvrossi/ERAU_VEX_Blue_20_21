@@ -11,9 +11,6 @@ using namespace std;
 #define TURNN90_L (500)
 #define TURNN90_R (-500)
 
-
-void moveTo(int FR,int FL,int BR,int BL,int speed);
-
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -30,7 +27,7 @@ vector<int> waypoint(int fr, int fl, int br, int bl, float speed, int cmd) {
     return way;
 }
 
-enum {intake, outtake, aim, lower, shoot} commands;
+enum commands{intake, outtake, aim, lower, shoot} ;
 
 void autonomous() {
 
@@ -62,12 +59,34 @@ int error3 = 0;
 
 int aimVel = 0;
 int aim_speed = 0;
-
 int deltaTime = 0;
+int timestamp = 0;
+int errorFR = 0;
+int errorFL = 0;
+int errorBR = 0;
+int errorBL = 0;
+int speedFR = 0;
+int speedFL = 0;
+int speedBR = 0;
+int speedBL = 0;
+int integralFR = 0;
+int integralFL = 0;
+int integralBR = 0;
+int integralBL = 0;
+int derivativeFR = 0;
+int derivativeFL = 0;
+int derivativeBR = 0;
+int derivativeBL = 0;
 
+int Kp = 0.01;
+int Ki = 0.000001;
+int Kd = 1;
+int integralActiveRange = 30;
 
 int numCounts = 500000; // While Loop limit
 // FR, FL, BR, BL, speed, command
+void moveTo(int speedFR, int speedFL, int speedBR, int speedBL);
+
 vector<vector<int> > arr = { // original
     /*waypoint(-365, -365, -365, -365, speed * .5, intake),
     waypoint(0,0,0,0,speed,aim),
@@ -181,12 +200,12 @@ for(vector<int> row: arr){
     inLeft.move(0);
     inRight.move(0);
     enc_shootLeft = shootLeft.get_position();
+    shootLeft.tare_position();
     while (enc_shootLeft < 2300){
       shootLeft.move(127);
       shootRight.move(127);
       enc_shootLeft = shootLeft.get_position();
     }
-    shootLeft.tare_position();
     shootLeft.move(0);
     shootRight.move(0);
     pauseTime = 3000;
@@ -227,30 +246,65 @@ for(vector<int> row: arr){
     encBR = backRight.get_position();
     encBL = backLeft.get_position();
 
-    int timestamp = pros::millis();
-    deltaTime = pros::millis() - timestamp
+    errorFR = abs(row[0] - encFR);
+    errorFL = abs(row[1] - encFL);
+    errorBR = abs(row[2] - encBR);
+    errorBL = abs(row[3] - encBL);
 
-    // proportion
-    int64_t error = target - motor.get_position();
-    errorAtZero = error == 0;
+    timestamp = pros::millis();
+    deltaTime = pros::millis() - timestamp;
 
-    // integral
-    if (errorAtZero || abs(error) > consts.integralActiveRange)
-      vars[i]->integral = 0;
-    else
-      vars[i]->integral += error * deltaTime;
+    // integralFR
+    if (errorFR == 0|| abs(errorFR) > integralActiveRange){
+      integralFR = 0;}
+    else{
+      integralFR += (errorFR) * deltaTime;}
+      // integralFL
+    if (errorFL == 0|| abs(errorFL) > integralActiveRange){
+      integralFL = 0;}
+    else{
+      integralFL += (errorFL) * deltaTime;}
+        // integralBR
+    if (errorBR == 0|| abs(errorBR) > integralActiveRange){
+      integralBR = 0;}
+    else{
+      integralBR += (errorBR) * deltaTime;
+    };
+    // integralBL
+    if (errorBL == 0|| abs(errorBL) > integralActiveRange){
+      integralBL = 0;
+    }
+    else{
+      integralBL += (errorBL) * deltaTime;
+    };
 
-    // derivative
-    vars[i]->derivative = (error - vars[i]->lastError) / deltaTime;
-    vars[i]->lastError = error;
-    derivativeAtZero = vars[i]->derivative == 0;
+    // derivativeFR
+    derivativeFR = frontRight.get_actual_velocity();
+    // derivativeFL
+    derivativeFL = frontLeft.get_actual_velocity();
+    // derivativeBR
+    derivativeBR = backRight.get_actual_velocity();
+    // derivativeBL
+    derivativeBL = backLeft.get_actual_velocity();
 
     // set motor speed
-    int speed = consts.Kp * error +
-                consts.Ki * vars[i]->integral +
-                consts.Kd * vars[i]->derivative;
-    speed = std::clamp(speed, -127, 127);
-    moveTo(row[0],row[1],row[2],row[3],speed);
+    speedFR = Kp * errorFR +
+              Ki * integralFR +
+              Kd * derivativeFR;
+    speedFL = Kp * errorFL +
+              Ki * integralFL +
+              Kd * derivativeFL;
+    speedBR = Kp * errorBR +
+              Ki * integralBR +
+              Kd * derivativeBR;
+    speedBL = Kp * errorBL +
+              Ki * integralBL +
+              Kd * derivativeBL;
+    speedFR = clamp(speedFR, -127, 127);
+    speedFL = clamp(speedFL, -127, 127);
+    speedBR = clamp(speedBR, -127, 127);
+    speedBL = clamp(speedBL, -127, 127);
+    moveTo(speedFR,speedFL,speedBR,speedBL);
   }
   frontRight.move(0);
   frontLeft.move(0);
@@ -282,7 +336,19 @@ for(vector<int> row: arr){
   backLeft.move_absolute(BL,speed);
 }*/
 
- void moveTo(int FR,int FL,int BR,int BL,int speedFR, int speedFL, int speedBR, int speedBL){
+
+
+ vector<int> turn90(int speed, enum commands var){
+   vector<int> way = waypoint(TURN90_R, TURN90_L, TURN90_R, TURN90_L, speed, var);
+   return way;
+ }
+
+ vector<int> turnN90(int speed, enum commands var){
+   vector<int> way = waypoint(TURNN90_R, TURNN90_L, TURNN90_R, TURNN90_L, speed, var);
+   return way;
+ }
+
+ void moveTo(int speedFR, int speedFL, int speedBR, int speedBL){
    // FR
    frontRight.move(speedFR);
 
@@ -293,15 +359,5 @@ for(vector<int> row: arr){
    backRight.move(speedBR);
 
    // BL
-   backLeft.move(speedBL)
- }
-
- vector<int> turn90(int speed, enum commands var){
-   vector<int> way = waypoint(TURN90_R, TURN90_L, TURN90_R, TURN90_L, speed, var);
-   return way;
- }
-
- vector<int> turnN90(int speed, enum commands var){
-   vector<int> way = waypoint(TURNN90_R, TURNN90_L, TURNN90_R, TURNN90_L, speed, var);
-   return way;
+   backLeft.move(speedBL);
  }
