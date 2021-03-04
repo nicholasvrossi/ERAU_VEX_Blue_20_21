@@ -78,9 +78,9 @@ int derivativeFL = 0;
 int derivativeBR = 0;
 int derivativeBL = 0;
 
-int Kp = 0.01;
-int Ki = 0.000001;
-int Kd = 1;
+double Kp = 127/1000;
+double Ki = 0.000001;
+double Kd = 3;
 int integralActiveRange = 30;
 
 int numCounts = 500000; // While Loop limit
@@ -227,32 +227,27 @@ for(vector<int> row: arr){
   backRight.tare_position();
   backLeft.tare_position();
 
-  encFR = frontRight.get_position();
-  encFL = frontLeft.get_position();
-  encBR = backRight.get_position();
-  encBL = backLeft.get_position();
+  errorFR = row[0] - encFR;
+  errorFL = row[1] - encFL;
+  errorBR = row[2] - encBR;
+  errorBL = row[3] - encBL;
 
-  cout << "hello!" << endl;
-
-  errorFR = abs(row[0] - encFR);
-  errorFL = abs(row[1] - encFL);
-  errorBR = abs(row[2] - encBR);
-  errorBL = abs(row[3] - encBL);
-  while((ii <= numCounts) && (errorFR > 1) && (errorFL > 1) && (errorBR > 1) && (errorBL > 1)){
+  timestamp = pros::millis();
+  while((ii <= numCounts) && ((abs(errorFR) > 1) || (abs(errorFL) > 1) || (abs(errorBR) > 1) || (abs(errorBL) > 1))){
     ii++;
     cout << ii << endl;;
-    encFR = frontRight.get_position();
-    encFL = frontLeft.get_position();
-    encBR = backRight.get_position();
-    encBL = backLeft.get_position();
+    encFR = frontRight.get_position()+errorFR;
+    encFL = frontLeft.get_position()+errorFL;
+    encBR = backRight.get_position()+errorBR;
+    encBL = backLeft.get_position()+errorBL;
 
-    errorFR = abs(row[0] - encFR);
-    errorFL = abs(row[1] - encFL);
-    errorBR = abs(row[2] - encBR);
-    errorBL = abs(row[3] - encBL);
+    errorFR = row[0] - encFR;
+    errorFL = row[1] - encFL;
+    errorBR = row[2] - encBR;
+    errorBL = row[3] - encBL;
 
-    timestamp = pros::millis();
     deltaTime = pros::millis() - timestamp;
+    timestamp = pros::millis();
 
     // integralFR
     if (errorFR == 0|| abs(errorFR) > integralActiveRange){
@@ -311,12 +306,11 @@ for(vector<int> row: arr){
   backRight.move(0);
   backLeft.move(0);
   // pros::delay(pauseTime);
-  pros::delay(1500);
   if (row[5] == intake){
     inLeft.move(0);
     inRight.move(0);
-    pros::delay(500);
   }
+  pros::delay(1500);
 }
 
 }
