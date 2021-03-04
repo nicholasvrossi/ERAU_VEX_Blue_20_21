@@ -42,6 +42,10 @@ int encSR = 0;
 int encSL = 0;
 int shoot_goal = 0;
 
+int pos_0_R = 0;
+int pos_0_L = 0;
+int stopped_toggle = 1;
+
 
 #define SHOOT (pros::E_CONTROLLER_DIGITAL_A)
 
@@ -119,13 +123,20 @@ void opcontrol() {
 
     if(master.get_digital(INTAKE)){
       Motor_Drive.hold(Intake,INTAKE_SPEED * 0.67);
+      stopped_toggle = 1;
     }
     else if(master.get_digital(OUTTAKE)){
       Motor_Drive.hold(Intake,OUTTAKE_SPEED * 0.67);
+      stopped_toggle = 1;
     }
     else{
-      Motor_Drive.hold(inLeft,0);
-      Motor_Drive.hold(inRight,0);
+      if (stopped_toggle == 1){
+        stopped_toggle == 0;
+        pos_0_R = inRight.get_position();
+        pos_0_L = inLeft.get_position();
+        }
+      inLeft.move_absolute(pos_0_L);
+      inRight.move_absolute(pos_0_R);
     }
 
 
