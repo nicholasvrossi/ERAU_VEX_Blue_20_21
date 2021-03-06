@@ -22,12 +22,12 @@ using namespace std;
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-vector<int> waypoint(int fr, int fl, int br, int bl, float speed, int cmd) {
-    vector<int> way = {fr, fl, br, bl, (int) speed, cmd};
+vector<int> waypoint(int fr, int fl, int br, int bl, int cmd) {
+    vector<int> way = {fr, fl, br, bl, cmd};
     return way;
 }
 
-enum commands{intake, outtake, aim, lower, shoot} ;
+enum commands{intake, outtake, aim, lower, shoot, none} ;
 
 void autonomous() {
 
@@ -59,33 +59,39 @@ int error3 = 0;
 
 int aimVel = 0;
 int aim_speed = 0;
-int deltaTime = 0;
-int timestamp = 0;
-int errorFR = 0;
-int errorFL = 0;
-int errorBR = 0;
-int errorBL = 0;
-int speedFR = 0;
-int speedFL = 0;
-int speedBR = 0;
-int speedBL = 0;
-int integralFR = 0;
-int integralFL = 0;
-int integralBR = 0;
-int integralBL = 0;
+long deltaTime = 0;
+long timestamp = 0;
+double errorFR = 0;
+double errorFL = 0;
+double errorBR = 0;
+double errorBL = 0;
+int true_errorFR = 0;
+int true_errorFL = 0;
+int true_errorBR = 0;
+int true_errorBL = 0;
+double speedFR = 0;
+double speedFL = 0;
+double speedBR = 0;
+double speedBL = 0;
+double integralFR = 0;
+double integralFL = 0;
+double integralBR = 0;
+double integralBL = 0;
 int derivativeFR = 0;
 int derivativeFL = 0;
 int derivativeBR = 0;
 int derivativeBL = 0;
 
-double Kp = 127/1000;
-double Ki = 0.000001;
-double Kd = 3;
-int integralActiveRange = 30;
+double Kp = 200.0/1000.0;
+double Ki = 0.0008;//0.000001;
+double Kd = -0.5;
+int integralActiveRange = 200;
 
-int numCounts = 500000; // While Loop limit
+int numCounts = 10000000; // While Loop limit
 // FR, FL, BR, BL, speed, command
 void moveTo(int speedFR, int speedFL, int speedBR, int speedBL);
+vector<int> turn90(enum commands var);
+vector<int> turnN90(enum commands var);
 
 vector<vector<int> > arr = { // original
     /*waypoint(-365, -365, -365, -365, speed * .5, intake),
@@ -137,8 +143,13 @@ vector<vector<int> > arr = { // original
     waypoint(0,0,0,0,speed,shoot),
     waypoint(-300,-300,-300,-300,speed*.5,lower),
     waypoint(-700,700,-700,700,speed*.5,-1)*/
-    waypoint(-500,500,-500,500,speed*0.3,-1)
+    turn90(none)
   };
+
+  frontRight.tare_position();
+  frontLeft.tare_position();
+  backRight.tare_position();
+  backLeft.tare_position();
 
 for(vector<int> row: arr){
   if (row[5] == intake){
@@ -233,21 +244,23 @@ for(vector<int> row: arr){
   errorBL = row[3] - encBL;
 
   timestamp = pros::millis();
-  while((ii <= numCounts) && ((abs(errorFR) > 1) || (abs(errorFL) > 1) || (abs(errorBR) > 1) || (abs(errorBL) > 1))){
+  while((pros::millis() - timestamp < numCounts) && ((abs(errorFR) > 5) || (abs(errorFL) > 5) || (abs(errorBR) > 5) || (abs(errorBL) > 5))){
     ii++;
-    cout << ii << endl;;
-    encFR = frontRight.get_position()+errorFR;
-    encFL = frontLeft.get_position()+errorFL;
-    encBR = backRight.get_position()+errorBR;
-    encBL = backLeft.get_position()+errorBL;
+    encFR = frontRight.get_position()+true_errorFR;
+    encFL = frontLeft.get_position()+true_errorFL;
+    encBR = backRight.get_position()+true_errorBR;
+    encBL = backLeft.get_position()+true_errorBL;
 
     errorFR = row[0] - encFR;
     errorFL = row[1] - encFL;
     errorBR = row[2] - encBR;
     errorBL = row[3] - encBL;
 
-    deltaTime = pros::millis() - timestamp;
-    timestamp = pros::millis();
+    cout<< errorFR<<' '<<errorFL<<' '<<errorBR<<' ' <<errorBL<< ' ' <<pros::millis() << endl;
+
+
+    deltaTime = 1;
+    pros::delay(1);
 
     // integralFR
     if (errorFR == 0|| abs(errorFR) > integralActiveRange){
@@ -283,23 +296,36 @@ for(vector<int> row: arr){
     derivativeBL = backLeft.get_actual_velocity();
 
     // set motor speed
-    speedFR = Kp * errorFR +
-              Ki * integralFR +
-              Kd * derivativeFR;
-    speedFL = Kp * errorFL +
-              Ki * integralFL +
-              Kd * derivativeFL;
-    speedBR = Kp * errorBR +
-              Ki * integralBR +
-              Kd * derivativeBR;
-    speedBL = Kp * errorBL +
-              Ki * integralBL +
-              Kd * derivativeBL;
-    speedFR = clamp(speedFR, -127, 127);
+    speedFR = (Kp * errorFR) +
+              (Ki * integralFR) +
+              (Kd * derivativeFR);
+    speedFL = (Kp * errorFL) +
+              (Ki * integralFL) +
+              (Kd * derivativeFL);
+    speedBR = (Kp * errorBR) +
+              (Ki * integralBR) +
+              (Kd * derivativeBR);
+    speedBL = (Kp * errorBL) +
+              (Ki * integralBL) +
+              (Kd * derivativeBL);
+
+              /*cout<< speedFR << endl;
+              cout<< speedFL << endl;
+              cout<< speedBR << endl;
+              cout<< speedBL << endl;*/
+
+              /*cout<< integralFR << endl;
+              cout<< integralFL << endl;
+              cout<< integralBR << endl;
+              cout<< integralBL << endl;*/
+              //cout<< deltaTime << endl;
+
+              //cout<< Kp << endl;
+    /*speedFR = clamp(speedFR, -127, 127);
     speedFL = clamp(speedFL, -127, 127);
     speedBR = clamp(speedBR, -127, 127);
-    speedBL = clamp(speedBL, -127, 127);
-    moveTo(speedFR,speedFL,speedBR,speedBL);
+    speedBL = clamp(speedBL, -127, 127);*/
+    moveTo(speedFR,speedFL,speedFR,speedFL);
   }
   frontRight.move(0);
   frontLeft.move(0);
@@ -311,6 +337,10 @@ for(vector<int> row: arr){
     inRight.move(0);
   }
   pros::delay(1500);
+  true_errorFR = row[0] - encFR;
+  true_errorFL = row[1] - encFL;
+  true_errorBR = row[2] - encBR;
+  true_errorBL = row[3] - encBL;
 }
 
 }
@@ -332,13 +362,13 @@ for(vector<int> row: arr){
 
 
 
- vector<int> turn90(int speed, enum commands var){
-   vector<int> way = waypoint(TURN90_R, TURN90_L, TURN90_R, TURN90_L, speed, var);
+ vector<int> turn90(enum commands var){
+   vector<int> way = waypoint(TURN90_R, TURN90_L, TURN90_R, TURN90_L, var);
    return way;
  }
 
- vector<int> turnN90(int speed, enum commands var){
-   vector<int> way = waypoint(TURNN90_R, TURNN90_L, TURNN90_R, TURNN90_L, speed, var);
+ vector<int> turnN90( enum commands var){
+   vector<int> way = waypoint(TURNN90_R, TURNN90_L, TURNN90_R, TURNN90_L, var);
    return way;
  }
 

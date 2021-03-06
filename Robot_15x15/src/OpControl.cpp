@@ -45,6 +45,12 @@ int shoot_goal = 0;
 int pos_0_R = 0;
 int pos_0_L = 0;
 int stopped_toggle = 1;
+int encIR = 0;
+int encIL = 0;
+int inError = 0;
+int inErrorL = 0;
+int inSpeedR = 0;
+int inSpeedL = 0;
 
 
 #define SHOOT (pros::E_CONTROLLER_DIGITAL_A)
@@ -131,12 +137,18 @@ void opcontrol() {
     }
     else{
       if (stopped_toggle == 1){
-        stopped_toggle == 0;
+        stopped_toggle = 0;
         pos_0_R = inRight.get_position();
         pos_0_L = inLeft.get_position();
         }
-      inLeft.move_absolute(pos_0_L);
-      inRight.move_absolute(pos_0_R);
+      encIR = inRight.get_position();
+      inError = pos_0_R - encIR;
+      encIL = inLeft.get_position();
+      inErrorL = pos_0_L - encIL;
+      inSpeedR = inRight.get_actual_velocity();
+      inSpeedL = inLeft.get_actual_velocity();
+      inLeft.move(inErrorL*0-inSpeedL*0);
+      inRight.move(inError*0-inSpeedR*0);
     }
 
 
