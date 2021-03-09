@@ -6,10 +6,11 @@
 #include <cmath>
 using namespace std;
 
-#define TURN90_L (-500)
-#define TURN90_R (500)
-#define TURNN90_L (500)
-#define TURNN90_R (-500)
+#define TURN90_L (-550)
+#define TURN90_R (550)
+#define TURNN90_L (550)
+#define TURNN90_R (-550)
+#define MAX_SPEED (60)
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -82,9 +83,9 @@ int derivativeFL = 0;
 int derivativeBR = 0;
 int derivativeBL = 0;
 
-double Kp = 0.2;
-double Ki = 0.0002;//0.000001;
-double Kd = -1;
+double Kp = 0.3;
+double Ki = 0.0003;//0.000001;
+double Kd = -1.0;
 int integralActiveRange = 200;
 
 int numCounts = 10000; // While Loop limit
@@ -143,6 +144,7 @@ vector<vector<int> > arr = { // original
     waypoint(0,0,0,0,speed,shoot),
     waypoint(-300,-300,-300,-300,speed*.5,lower),
     waypoint(-700,700,-700,700,speed*.5,-1)*/
+    waypoint(700,700,700,700,-1),
     turn90(none)
   };
 
@@ -244,7 +246,7 @@ for(vector<int> row: arr){
   errorBL = row[3] - encBL;
 
   timestamp = pros::millis();
-  while((pros::millis() - timestamp < numCounts) && ((abs(errorFR) > 5) || (abs(errorFL) > 5) || (abs(errorBR) > 5) || (abs(errorBL) > 5))){
+  while((pros::millis() - timestamp < numCounts) && (((abs(errorFR) > 5) && (abs(errorFL) > 5)) || ((abs(errorBR) > 5) && (abs(errorBL) > 5)))){
     ii++;
     encFR = frontRight.get_position()+true_errorFR;
     encFL = frontLeft.get_position()+true_errorFL;
@@ -308,6 +310,31 @@ for(vector<int> row: arr){
     speedBL = (Kp * errorBL) +
               (Ki * integralBL) +
               (Kd * derivativeBL);
+
+              if (speedFR > MAX_SPEED){
+                speedFR = MAX_SPEED;
+              }
+              else if (speedFR < -MAX_SPEED){
+                speedFR = -MAX_SPEED;
+              }
+              if (speedFL > MAX_SPEED){
+                speedFL = MAX_SPEED;
+              }
+              else if (speedFL < -MAX_SPEED){
+                speedFL = -MAX_SPEED;
+              }
+              if (speedBR > MAX_SPEED){
+                speedBR = MAX_SPEED;
+              }
+              else if (speedBR < -MAX_SPEED){
+                speedBR = -MAX_SPEED;
+              }
+              if (speedBL > MAX_SPEED){
+                speedBL = MAX_SPEED;
+              }
+              else if (speedBL < -MAX_SPEED){
+                speedBL = -MAX_SPEED;
+              }
 
               /*cout<< speedFR << endl;
               cout<< speedFL << endl;
