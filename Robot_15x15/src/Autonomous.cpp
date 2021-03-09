@@ -82,12 +82,12 @@ int derivativeFL = 0;
 int derivativeBR = 0;
 int derivativeBL = 0;
 
-double Kp = 200.0/1000.0;
-double Ki = 0.0008;//0.000001;
-double Kd = -0.5;
+double Kp = 0.2;
+double Ki = 0.0002;//0.000001;
+double Kd = -1;
 int integralActiveRange = 200;
 
-int numCounts = 10000000; // While Loop limit
+int numCounts = 10000; // While Loop limit
 // FR, FL, BR, BL, speed, command
 void moveTo(int speedFR, int speedFL, int speedBR, int speedBL);
 vector<int> turn90(enum commands var);
