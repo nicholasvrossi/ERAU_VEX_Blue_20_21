@@ -11,13 +11,14 @@
 #define MOTOR_FRONT_RIGHT_PORT (2)
 #define MOTOR_BACK_LEFT_PORT   (3)
 #define MOTOR_BACK_RIGHT_PORT  (4)
-// intake motors
-#define MOTOR_INTAKE_LEFT_PORT  (6)
-#define MOTOR_INTAKE_RIGHT_PORT (7)
-// lift motors
-#define MOTOR_LIFT_LEFT_PORT  (8)
-#define MOTOR_LIFT_RIGHT_PORT (9)
-#define MOTOR_EJECTOR_PORT    (10)
+// Turntable motors
+#define MOTOR_TURNTABLE1_PORT (1)
+#define MOTOR_TURNTABLE2_PORT (7)
+// Pyrmid open and close motors
+#define MOTOR_PYRM1_PORT  (8)
+#define MOTOR_PYRM2_PORT  (9)
+#define MOTOR_PYRM3_PORT   (10)
+#define MOTOR_PYRM4_PORT     (11)
 
 #define INTAKE_SPEED  (127)
 #define OUTTAKE_SPEED (-INTAKE_SPEED)
@@ -48,15 +49,17 @@ extern pros::Motor inLeft;  // back right
 
 extern pros::Motor inRight;  // back right
 
-extern pros::MotorSet Intake;
+extern pros::Motor Pyrm1;
 
-extern pros::Motor liftLeft;
+extern pros::Motor Pyrm2;
 
-extern pros::Motor liftRight;
+extern pros::Motor Pyrm3;
 
-extern pros::Motor ejector;
+extern pros::Motor Pyrm4;
 
-extern pros::MotorSet LiftSet;
+extern pros::Motor TurnTable1;
+
+extern pros::Motor TurnTable2;
 
 extern pros::ADIAnalogIn colorSensor;
 

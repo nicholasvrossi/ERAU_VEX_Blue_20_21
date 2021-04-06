@@ -27,34 +27,35 @@ pros::Motor backRight(MOTOR_BACK_RIGHT_PORT,
                       true,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
-pros::Motor inLeft(MOTOR_INTAKE_LEFT_PORT,
+pros::Motor Pyrm1(MOTOR_PYRM1_PORT,
                       pros::E_MOTOR_GEARSET_18,
                       false,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
-pros::Motor inRight(MOTOR_INTAKE_RIGHT_PORT,
-                      pros::E_MOTOR_GEARSET_18,
-                      true,
-                      pros::E_MOTOR_ENCODER_COUNTS);
-
-pros::MotorSet Intake = {inLeft,inRight};
-
-pros::Motor liftLeft(MOTOR_LIFT_LEFT_PORT,
+pros::Motor Pyrm2(MOTOR_PYRM2_PORT,
                       pros::E_MOTOR_GEARSET_18,
                       false,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
-pros::Motor liftRight(MOTOR_LIFT_RIGHT_PORT,
+pros::Motor Pyrm3(MOTOR_PYRM3_PORT,
+                      pros::E_MOTOR_GEARSET_18,
+                      false,
+                      pros::E_MOTOR_ENCODER_COUNTS);
+
+pros::Motor Pyrm4(MOTOR_PYRM4_PORT,
+                      pros::E_MOTOR_GEARSET_18,
+                      false,
+                      pros::E_MOTOR_ENCODER_COUNTS);
+
+pros::Motor TurnTable1(MOTOR_TURNTABLE1_PORT,
                       pros::E_MOTOR_GEARSET_18,
                       true,
                       pros::E_MOTOR_ENCODER_COUNTS);
 
-pros::Motor ejector(MOTOR_EJECTOR_PORT,
+pros::Motor TurnTable2(MOTOR_TURNTABLE2_PORT,
                       pros::E_MOTOR_GEARSET_18,
                       true,
                       pros::E_MOTOR_ENCODER_COUNTS);
-
-pros::MotorSet LiftSet = {liftLeft, liftRight};
 
 pros::ADIAnalogIn colorSensor('A');
 
