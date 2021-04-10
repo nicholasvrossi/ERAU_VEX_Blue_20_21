@@ -7,17 +7,17 @@
 #define IS_RED (1)
 
 // Define the four drive motors
-#define MOTOR_FRONT_LEFT_PORT  (13)
-#define MOTOR_FRONT_RIGHT_PORT (2)
-#define MOTOR_BACK_LEFT_PORT   (3)
-#define MOTOR_BACK_RIGHT_PORT  (4)
+#define MOTOR_FRONT_LEFT_PORT  (5)
+#define MOTOR_FRONT_RIGHT_PORT (4)
+#define MOTOR_BACK_LEFT_PORT   (15)
+#define MOTOR_BACK_RIGHT_PORT  (14)
 // Turntable motors
-#define MOTOR_TURNTABLE1_PORT (1)
-#define MOTOR_TURNTABLE2_PORT (7)
+#define MOTOR_TURNTABLE1_PORT (10)
+#define MOTOR_TURNTABLE2_PORT (9)
 // Pyrmid open and close motors
-#define MOTOR_PYRM1_PORT  (8)
-#define MOTOR_PYRM2_PORT  (9)
-#define MOTOR_PYRM3_PORT   (10)
+#define MOTOR_PYRM1_PORT  (20)
+#define MOTOR_PYRM2_PORT  (19)
+#define MOTOR_PYRM3_PORT   (1)
 #define MOTOR_PYRM4_PORT     (11)
 
 #define INTAKE_SPEED  (127)
